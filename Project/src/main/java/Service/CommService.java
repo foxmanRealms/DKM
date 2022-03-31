@@ -30,7 +30,7 @@ public class CommService implements Command {
 		String user_id = request.getParameter("user_id");
 		
 		CommDTO commdto = new CommDTO(0, story_seq, cmt_content, null, user_id);
-		CommDAO.insertComm(commdto);
+		
 		
 		return nextpage;
 	}
