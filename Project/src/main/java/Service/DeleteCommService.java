@@ -1,40 +1,35 @@
 package Service;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-
 import javax.servlet.http.HttpServletResponse;
 
 import Inter.Command;
 import Model.CommDAO;
 import Model.CommDTO;
 
-public class CommService implements Command {
+public class DeleteCommService implements Command{
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
 		String nextpage = null;
 		
-		System.out.println("[CommServiceCon.do]");
+		System.out.println("[DeleteCommServiceCon.do]");
 		request.setCharacterEncoding("utf-8");
 		
+		int cmt_seq = Integer.parseInt(request.getParameter("cmt_seq"));
 		int story_seq = Integer.parseInt(request.getParameter("story_seq"));
-		String cmt_content = request.getParameter("cmt_content");
-		String user_id = request.getParameter("user_id");
 		
-		CommDTO commdto = new CommDTO(0, story_seq, cmt_content, null, user_id);
-		
-		int cnt = new CommDAO().insertComm(commdto);
+		int cnt = new CommDAO().deleteComm(cmt_seq);
 		
 		if(cnt > 0) {
-			System.out.println("´ñ±Û µî·Ï ¼º°ø!");
+			System.out.println("´ñ±Û »èÁ¦ ¼º°ø!");
 		} else {
-			System.out.println("´ñ±Û µî·Ï ½ÇÆÐ!");
+			System.out.println("´ñ±Û »èÁ¦ ½ÇÆÐ!");
 		}
 
 		nextpage = "storySelect.jsp?story_seq="+story_seq;

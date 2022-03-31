@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class CommDAO {
 	
@@ -46,12 +47,29 @@ public class CommDAO {
 	}
 	
 	
+	/*
+	 CREATE TABLE t_comment
+(
+   cmt_seq         NUMBER(12, 0)     NOT NULL, 
+   story_seq       NUMBER(12, 0)     NOT NULL, 
+   cmt_content     VARCHAR2(4000)    NOT NULL, 
+   cmt_joindate    DATE              DEFAULT SYSDATE NOT NULL, 
+   user_id         VARCHAR2(30)      NOT NULL, 
+    PRIMARY KEY (cmt_seq)
+);
+	 */
+	
+	
 	// 댓글 작성 메소드 
-	public int insertComm() {
+	public int insertComm(CommDTO commdto) {
 		dbConn();
 		try {
-			sql = "insert into";
+			sql = "insert into t_comment values(t_comment_SEQ.NEXTVAL, ?, ?, sysdate, ?)";
 			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, commdto.getStory_seq());
+			psmt.setString(2, commdto.getCmt_content());
+			psmt.setString(3, commdto.getUser_id());
+			cnt = psmt.executeUpdate();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,16 +78,61 @@ public class CommDAO {
 		} return cnt;
 	}
 	
+	// 댓글 조회 메소드
+	public ArrayList<CommDTO> selectComm(int story_seq){
+		dbConn();
+		ArrayList<CommDTO> commlist = new ArrayList<CommDTO>(); 
+				
+		try {
+			sql = "select * from t_comment where story_seq = ?";
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, story_seq);
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+			   int cmt_seq = rs.getInt(1);
+			   story_seq = rs.getInt(2);
+			   String cmt_content = rs.getString(3);
+			   String cmt_joindate = rs.getString(4);
+			   String user_id = rs.getString(5);
+
+			  CommDTO commdto = new CommDTO(cmt_seq, story_seq, cmt_content, cmt_joindate, user_id);
+			  commlist.add(commdto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return commlist;
+	}
+	
 	// 총 댓글 수 조회 메소드
-	public int totalComm() {
+	public int totalComm(int story_seq) {
 		dbConn();
 		try {
-			sql = "select count(*) from t_comment";
+			sql = "select count(*) from t_comment where story_seq = ?";
 			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, story_seq);
 			rs = psmt.executeQuery();
 			if(rs.next()) {
 				cnt = rs.getInt(1);
 			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return cnt;
+	}
+	
+	// 댓글 삭제 메소드
+	public int deleteComm(int cmt_seq) {
+		dbConn();
+		try {
+			sql = "delete from t_comment where cmt_seq = ?";
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, cmt_seq);
+			cnt = psmt.executeUpdate();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

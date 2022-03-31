@@ -25,10 +25,12 @@
 		int story_seq = Integer.parseInt(request.getParameter("story_seq"));
 		StoryDTO stdto = new StoryDAO().selectBoardOne(story_seq);
 		
-		int totalComm = new CommDAO().totalComm();
 		
 		// 댓글 가져오기
-		// ArrayList<댓글>
+		CommDAO commdao = new CommDAO();
+		ArrayList<CommDTO> commlist = commdao.selectComm(story_seq);
+		int totalComm = commdao.totalComm(story_seq);
+		
 		
 	%>
 
@@ -125,23 +127,21 @@
 					<!-- Comment -->
 					<section>
 						<h3>댓글</h3>
-						<!-- 댓글 조회 -->
+						<!-- 댓글 출력 -->
+						<form action="DeleteCommServiceCon.do" method="post">
 						<div id="selectCmt">
-							<%-- 
-							댓글 출력 
-							 arraylist --> for문
-							 
+							 <% for(CommDTO l : commlist){ %>
 							 <div>
-					 			<h4>uid</h4> 
-			            		cmt<br> 
-			            		date <input type="button" value="삭제" class="button small removeCmt"/>
+					 			<h4><%= l.getUser_id() %></h4> 
+			            		<%= l.getCmt_content() %><br> 
+			            		<%= l.getCmt_joindate() %> 
+			            		<input type="submit" value="삭제" class="button small removeCmt"/>
+			            		<input type="hidden" name="cmt_seq" value="<%= l.getCmt_seq()%>"/>
+			            		<input type="hidden" name="story_seq" value="<%= l.getStory_seq()%>"/>
 			            	</div>
-							
-							--%>
-							
-						
-						</div>
-
+							<%} %>
+						</div> 
+						</form>
 
 						<!-- 댓글 달기 -->
 						<div class="comm-div">
@@ -163,14 +163,9 @@
 							<%} %>
 						</div>
 						
-						<%
-							// 댓글 다는 사용자, 날짜
-							String uid = udto.getUser_id();
-							String date = stdto.getStory_joindate().substring(0,16);
-						%>
-						
-						
 						<script>
+						<%-- 새로고침하기 때문에 이벤트 필요 x
+						
 						$(document).ready(function(){
 								
 							$('.removeCmt').on('click', function(){
@@ -180,7 +175,7 @@
 					        })
 	
 						})
-	
+						--%>
 						
 						<%-- // openAPI 쓸 경우에 제이쿼리 OR 일반 자바스크립트 문법 선택
 						function save(){
@@ -214,7 +209,8 @@
 								
 							});
 							
-						} --%>
+						} 
+						--%>
 		
 						</script>
 						

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Inter.Command;
 import Service.CommService;
+import Service.DeleteCommService;
 import Service.EditPwService;
 import Service.IdCheckService;
 import Service.JoinService;
@@ -66,13 +67,17 @@ public class FrontController extends HttpServlet {
 			com = new StoryBoardService();
 			nextpage = com.execute(request, response);
 		
-		// 코멘트 기능
+		// 댓글 작성 기능
 		} else if(command.equals("CommServiceCon.do")) {
 			com = new CommService();
 			nextpage = com.execute(request, response);
+		
+		// 댓글 삭제 기능
+		} else if(command.equals("DeleteCommServiceCon.do")) {
+			com = new DeleteCommService();
+			nextpage = com.execute(request, response);
+			
 		}
-		
-		
 		
 		
 		
