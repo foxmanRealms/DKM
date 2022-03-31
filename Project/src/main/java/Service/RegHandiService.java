@@ -30,7 +30,7 @@ public class RegHandiService implements Command{
 		
 		String result ="";
 		response.setCharacterEncoding("UTF-8");
-		
+		  
 		PrintWriter out = response.getWriter();
 		out.print(result);
 		return null;
