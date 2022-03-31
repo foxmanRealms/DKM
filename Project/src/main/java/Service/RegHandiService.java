@@ -28,11 +28,10 @@ public class RegHandiService implements Command{
 		String hAdr = h_roadAddress + " " + h_detailAddress;
 		
 		
-		String result ="";
 		response.setCharacterEncoding("UTF-8");
 		  
 		PrintWriter out = response.getWriter();
-		out.print(result);
+		out.print("");
 		return null;
 	}
 }
