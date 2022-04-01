@@ -22,16 +22,15 @@ public class handiDTO {
 	private double h_seq;
 	private String h_name;
 	private String h_relationship;
-	private Date h_birthdate;
+	private String h_birthdate;
 	private String h_addr;
 	private String h_gender;
 	private String h_phone;
 	private String user_id;
 	
 	
-	public handiDTO(double h_seq, String h_name, String h_relationship, Date h_birthdate, String h_addr,
+	public handiDTO(double h_seq, String h_name, String h_relationship, String h_birthdate, String h_addr,
 			String h_gender, String h_phone, String user_id) {
-		super();
 		this.h_seq = h_seq;
 		this.h_name = h_name;
 		this.h_relationship = h_relationship;
@@ -43,6 +42,16 @@ public class handiDTO {
 	}
 	
 	
+	public handiDTO(String h_name, String h_relationship, String h_birthdate, String h_gender, String h_phone, String h_Addr, String user_id) {
+		this.h_name = h_name;
+		this.h_relationship = h_relationship;
+		this.h_birthdate = h_birthdate;
+		this.h_gender = h_gender;
+		this.h_phone = h_phone;
+		this.user_id = user_id;
+	}
+
+
 	public double getH_seq() {
 		return h_seq;
 	}
@@ -61,10 +70,10 @@ public class handiDTO {
 	public void setH_relationship(String h_relationship) {
 		this.h_relationship = h_relationship;
 	}
-	public Date getH_birthdate() {
+	public String getH_birthdate() {
 		return h_birthdate;
 	}
-	public void setH_birthdate(Date h_birthdate) {
+	public void setH_birthdate(String h_birthdate) {
 		this.h_birthdate = h_birthdate;
 	}
 	public String getH_addr() {

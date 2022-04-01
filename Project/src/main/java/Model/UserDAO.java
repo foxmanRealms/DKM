@@ -23,9 +23,9 @@ public class UserDAO {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
 			// 1-2. DB에 접속하기 위한 주소, 아이디, 패스워드 지정
-			String url = "jdbc:oracle:thin:@localhost:1521:xe";
-			String db_id = "hr";
-			String db_pw = "hr";
+			String url = "jdbc:oracle:thin:@project-db-stu.ddns.net:1524:xe";
+			String db_id = "campus_b_0310_1";
+			String db_pw = "smhrd1";
 			
 			// 1-3. Connection 객체 사용해서 DB연결!
 			conn = DriverManager.getConnection(url, db_id, db_pw);
@@ -103,7 +103,7 @@ CREATE TABLE t_user
 		dbConn();
 		
 		try {
-			sql = "insert into t_user values(?, ?, ?, null, null, null, ?, ?, ?, ?, ?, sysdate)";
+			sql = "insert into t_user values(?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate, ?, ?)";
 			
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, udto.getUser_id());
@@ -114,7 +114,9 @@ CREATE TABLE t_user
 			psmt.setString(6, String.valueOf(udto.getUser_gender()));
 			psmt.setString(7, udto.getUser_phone());
 			psmt.setString(8, udto.getUser_region());
-				
+			psmt.setString(9, null);
+			psmt.setString(10, null);
+			psmt.setString(11, null);
 			cnt = psmt.executeUpdate();
 			
 		} catch (Exception e) {

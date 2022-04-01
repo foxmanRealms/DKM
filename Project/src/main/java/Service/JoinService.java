@@ -56,8 +56,10 @@ public class JoinService implements Command{
 		String user_birthdate = request.getParameter("user_birthdate");  
 		char user_gender = (request.getParameter("user_gender")).charAt(0);  
 		String user_phone = request.getParameter("user_phone");  
-		String user_region = request.getParameter("user_region");  
 		
+		String re_roadAddress = request.getParameter("re_roadAddress");  
+		String re_detailAddress = request.getParameter("re_detailAddress");  
+		String user_Addr = re_roadAddress + " " + re_detailAddress;
 		// 전역변수 선언
 		UserDTO udto = null;
 		int cnt = 0;
@@ -67,12 +69,12 @@ public class JoinService implements Command{
 		// 복지사는 0 
 		if(user_type == '0') {
 			udto = new UserDTO(user_id, user_pw, user_type, user_company, user_com_tel, user_license, 
-					user_name, user_birthdate, user_gender, user_phone, user_region);
+					user_name, user_birthdate, user_gender, user_phone, user_Addr);
 			cnt = new UserDAO().join0(udto);		
 		
 		// 보호자는 1
 		} else {
-			udto = new UserDTO(user_id, user_pw, user_type, user_name, user_birthdate, user_gender, user_phone, user_region);
+			udto = new UserDTO(user_id, user_pw, user_type, user_name, user_birthdate, user_gender, user_phone, user_Addr);
 			cnt = new UserDAO().join1(udto);
 		}
 

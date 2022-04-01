@@ -47,9 +47,7 @@
 							<%
 							if (udto != null) {
 							%>
-							<li><a
-								href="edit_pw_next.jsp?user_id=<%=udto.getUser_id()%>">비밀번호
-									재설정</a></li>
+							<li><a href="edit_pw_next.jsp?user_id=<%=udto.getUser_id()%>">비밀번호 재설정</a></li>
 							<%
 							} else {
 							%>
@@ -142,12 +140,13 @@
 									<span id="guide" style="color: #999; display: none"></span> 
 									<input type="text" id="re_detailAddress" name="re_detailAddress" placeholder="상세주소"> 
 									<input type="hidden" id="re_extraAddress" name="re_extraAddress" placeholder="법정동">
+									<input type="hidden" name="user_id" value="<%= udto.getUser_name() %>"/>
 								</td>
 							</tr>
 
 							<tr bgcolor="white" colspan="2">
 								<td colspan="2" align="center">
-								<input type="button"value="등록"> 
+								<input type="button" onclick="input()" value="등록"> 
 								<input type="reset" value="취소">
 								</td>
 							</tr>
@@ -230,10 +229,10 @@
             // 카카오 주소 api
             function findAddr(){ new daum.Postcode({ oncomplete: function(data)
             { console.log(data); // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분. 
-            // 도로명 주소의 노출 규칙에 따라 주소를 표시한다. // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여
-            분기 한다. let roadAddr = data.roadAddress; 
-            // 도로명 주소 변수 let jibunAddr =
-            data.jibunAddress; 
+            // 도로명 주소의 노출 규칙에 따라 주소를 표시한다. // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            let roadAddr = data.roadAddress; 
+            // 도로명 주소 변수 
+            let jibunAddr = data.jibunAddress; 
             // 지번 주소 변수 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
             document.getElementById('member_post').value = data.zonecode;
@@ -248,19 +247,20 @@
 		<script type="text/javascript">
 		function input(){
 			$.ajax({
-				url: "Ex01Sum",
-				type: "get",
+				url: "RegHandiServiceCon.do",
+				type: "post",
 				data: {
 					"hRelation"	 : $('input[name=h_relation]').val(),
 					"hName" 	 : $('input[name=h_name]').val(),
 					"hBirth" 	 : $('input[name=h_birthdate]').val(),
 					"hGender" 	 : $('input[name=h_gender]').val(),
 					"hPhone" 	 : $('input[name=h_phone]').val(),
-					"hRoadAdr" 	 : $('input[name=re_roadAddress]').val()
-					"hDetailAdr" : $('input[name=re_detailAddress]').val()
+					"hRoadAdr" 	 : $('input[name=re_roadAddress]').val(),
+					"hDetailAdr" : $('input[name=re_detailAddress]').val(),
+					"user_id"	 : $('input[name=user_id]').val()
 				},
 				//dataType -> 데이터 보낼 때
-								//서버에 요청된 결과가 담김
+				//서버에 요청된 결과가 담김
 				success: function(res){
 					alert("등록 성공!");
 				},

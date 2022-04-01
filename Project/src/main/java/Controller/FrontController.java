@@ -16,6 +16,7 @@ import Service.IdCheckService;
 import Service.JoinService;
 import Service.LoginService;
 import Service.LogoutService;
+import Service.RegHandiService;
 import Service.StoryBoardService;
 import Service.StoryCnt;
 
@@ -76,8 +77,13 @@ public class FrontController extends HttpServlet {
 		} else if(command.equals("DeleteCommServiceCon.do")) {
 			com = new DeleteCommService();
 			nextpage = com.execute(request, response);
-			
+		
+		//장애인 등록 기능
+		} else if(command.equals("RegHandiServiceCon.do")) {
+			com = new RegHandiService();
+			nextpage = com.execute(request, response);
 		}
+		
 		
 		
 		
