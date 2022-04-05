@@ -78,7 +78,7 @@
 					<li class='sub-menu'><a href="Mypage.jsp">마이페이지&nbsp;&nbsp;&nbsp;<i
 							class='fa fa-angle-down'></i></a>
 						<ul>
-							<li><a href="edit_info.jsp">내 정보 수정</a></li>
+							<li><a href="update_info.jsp">내 정보 수정</a></li>
 							
 							<% if(udto != null){ %>
 								<li><a href="edit_pw_next.jsp?user_id=<%= udto.getUser_id()%>">비밀번호 재설정</a></li>
@@ -124,9 +124,7 @@
 		<!-- Main -->
 		
 		<!--모달 본문  -->
-      <div>
-         <btn id="btn-modal">모달 켜기</btn>
-      </div>
+      
 
       <div id="modal" class="modal-overlay">
          <%
@@ -145,9 +143,9 @@
             mo_title = "가입 성공";
             mo_content = "가입을 환영합니다";
          } else if (check.equals("1") && status.equals("2")) {
-            System.out.println("[2진입] " + status);
-            mo_title = "2 성공";
-            mo_content = "2 환영합니다";
+            System.out.println("[가입실패] " + status);
+            mo_title = "회원가입 실패";
+            mo_content = "양식을 다시 한번 확인해주세요";
          } else if (check.equals("1") && status.equals("3")) {
             System.out.println("[3진입] " + status);
             mo_title = "3 성공";
@@ -189,11 +187,6 @@
 		function modalOff() {
 		    modal.style.display = "none"
 		}
-		// 모달 켜기버튼
-		const btnModal = document.getElementById("btn-modal")
-		btnModal.addEventListener("click", e => {
-		    modalOn()
-		})
 		// 모달 끄기 구간
 		const closeBtn = modal.querySelector(".close-area")
 		closeBtn.addEventListener("click", e => {

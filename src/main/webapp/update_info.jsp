@@ -1,25 +1,25 @@
 <%@page import="Model.UserDTO"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
-   pageEncoding="utf-8"%>
+	pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>회원 가입</title>
+<title>내 정보 수정</title>
 <meta charset="utf-8" />
 <meta name="viewport"
-   content="width=device-width, initial-scale=1, user-scalable=no" />
+	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" href="assets/css/main.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="is-preload">
+	
+	<%
+		UserDTO udto = (UserDTO)session.getAttribute("udto");
+	%>
 
-   <%
-   UserDTO udto = (UserDTO) session.getAttribute("udto");
-   %>
+	<div id="page-wrapper">
 
-   <div id="page-wrapper">
-
-      <!-- Header -->
+		<!-- Header -->
 		<header id="header">
 			<h1>
 				<a href="Index.jsp">복순이&nbsp;&nbsp;</a>by dr.boksun
@@ -27,8 +27,8 @@
 			<nav id="nav">
 				<ul>
 					<li><a href="Index.jsp">홈</a></li>
-					<li><a href="select_handi.jsp">정보 등록 및
-							조회&nbsp;&nbsp;&nbsp;<i class='icon solid fa fa-angle-down'></i>
+					<li><a href="select_handi.jsp">정보 등록 및 조회&nbsp;&nbsp;&nbsp;<i
+							class='icon solid fa fa-angle-down'></i>
 					</a>
 						<ul>
 							<li><a href="reg_handi.jsp">회원 정보 등록</a></li>
@@ -43,36 +43,22 @@
 					<li class='sub-menu'><a href="Mypage.jsp">마이페이지&nbsp;&nbsp;&nbsp;<i
 							class='fa fa-angle-down'></i></a>
 						<ul>
-							<li><a href="edit_info.jsp">내 정보 수정</a></li>
-
-							<%
-							if (udto != null) {
-							%>
-							<li><a
-								href="edit_pw_next.jsp?user_id=<%=udto.getUser_id()%>">비밀번호
-									재설정</a></li>
-							<%
-							} else {
-							%>
-							<li><a href="edit_pw.jsp">비밀번호 변경</a></li>
-							<%
-							}
-							%>
+							<li><a href="update_info.jsp">내 정보 수정</a></li>
+							
+							<% if(udto != null){ %>
+								<li><a href="edit_pw_next.jsp?user_id=<%= udto.getUser_id()%>">비밀번호 재설정</a></li>
+							<%} else{ %>
+								<li><a href="edit_pw.jsp">비밀번호 변경</a></li>
+							<%} %>
 							<li><a href="select_user0.jsp">담당 복지사 조회</a></li>
 							<li><a href="select_user1.jsp">보호자 조회</a></li>
 						</ul></li>
 
-					<%
-					if (udto != null) {
-					%>
-					<li><a href="LogoutServiceCon.do" class="button">로그아웃</a></li>
-					<%
-					} else {
-					%>
-					<li><a href="Login.jsp" class="button">로그인</a></li>
-					<%
-					}
-					%>
+					<% if(udto != null){ %>
+						<li><a href="LogoutServiceCon.do" class="button">로그아웃</a></li>
+					<%} else{%>
+						<li><a href="Login.jsp" class="button">로그인</a></li>
+					<%} %>
 
 				</ul>
 			</nav>
@@ -80,33 +66,28 @@
 
 
 
-
-      <!-- Main -->
-      <section id="main" class="container">
-         <header>
-            <h2>회원가입</h2>
-            <p>반갑습니다, 복순이입니다.</p>
-         </header>
-         <div class="box">
+		<!-- Main -->
+		<section id="main" class="container">
+			<header>
+				<h2>내 정보 수정</h2>
+				<p>정보 수정 페이지입니다.</p>
+			</header>
+			<div class="box">
             <span class="image featured"><img src="images/pic01.jpg"
                alt="" /></span>
 
             <!-- 사용자와의 관계 : 복지사는 0 보호자는 1 -->
-            <form action="JoinServiceCon.do" method="post">
+            <form action="UpdateInfoServiceCon.do" method="post">
                <table>
                   <thead>
-                     <h3>가입하기</h3>
+                     <h3>수정하기</h3>
                   </thead>
 
                   <tbody>
                      <tr>
 						<td>아이디</td>
-						<td><input id="" type="text" name="user_id"
-							placeholder="아이디를 입력해 주세요."> 
-							<span class="button small" onclick="idCheck()">중복확인 
-							</span>
-							<!-- 중복 체크 메세지 출력 -->
-							<span id="idcheck" style="color: red;"></span>
+						<td><%= udto.getUser_id() %></td>
+						<input type="hidden" name="user_id" value="<%= udto.getUser_id() %>">
 					</tr>
                      <tr>
                         <td>비밀번호</td>
@@ -132,33 +113,29 @@
 
                      <tr>
                         <td>사용자와의 관계</td>
-                        <td>
-                           <div class="col-4 col-12-narrower">
-                              <input type="radio" id="type0" name="user_type" value="0"
-                                 checked> <label for="type0" onclick="push0()">복지사(기관)</label>
+                        <input type="hidden" name="user_type" value="<%= udto.getUser_type() %>">
+                        <% if(udto.getUser_type() == '0') { %>
+                        	<td>복지사(기관)</td>
+		                     <!-- 복지사일 경우 -->
+		                     <tr class="comp">
+		                        <td>복지관명</td>
+		                        <td><input type="text" name="user_company"
+		                           placeholder="회사명을 입력해 주세요."></td>
+		                     </tr>
+		                     <tr class="comp">
+		                        <td>복지관 전화번호</td>
+		                        <td><input type="text" name="user_comtel"
+		                           placeholder="회사 전화번호를 입력해 주세요."></td>
+		                     </tr>
+		                     <tr class="comp">
+		                        <td>복지사 면허번호</td>
+		                        <td><input type="text" name="user_license"
+		                           placeholder="면허번호를 입력해 주세요."></td>
+		                     </tr>
+                        <%} else { %>
+                        	<td>보호자(가족)</td>
+						<%} %>
 
-                              <input type="radio" id="type1" name="user_type" value="1">
-                              <label for="type1" onclick="push1()">보호자(가족)</label>
-                           </div>
-                        </td>
-
-
-                     <!-- 복지사일 경우 -->
-                     <tr class="comp">
-                        <td>복지관명</td>
-                        <td><input type="text" name="user_company"
-                           placeholder="회사명을 입력해 주세요."></td>
-                     </tr>
-                     <tr class="comp">
-                        <td>복지관 전화번호</td>
-                        <td><input type="text" name="user_comtel"
-                           placeholder="회사 전화번호를 입력해 주세요."></td>
-                     </tr>
-                     <tr class="comp">
-                        <td>복지사 면허번호</td>
-                        <td><input type="text" name="user_license"
-                           placeholder="면허번호를 입력해 주세요."></td>
-                     </tr>
 
                      <!-- ------------------------------------------------------ -->
                      <tr>
@@ -196,14 +173,14 @@
                            <!-- <input type="hidden" id="re_jibunAddress" name="re_jibunAddress"  placeholder="지번주소">     -->
                            <span id="guide" style="color: #999; display: none"></span> <input
                            type="text" id="re_detailAddress" name="re_detailAddress"
-                           placeholder="상세주소"> <input type="hidden"
+                           placeholder="상세주소" style="margin-top:5px"> <input type="hidden"
                            id="re_extraAddress" name="re_extraAddress" placeholder="법정동">
                         </td>
                      </tr>
                      <tr>
                         <td align="center" colspan="2"><input type="reset"
                            class="button alt" value="재입력"> <input type="submit"
-                           id="submit" value="가입하기"></td>
+                           id="submit" onClick= "Smessage()" value="수정하기"></td>
                      </tr>
                      <tr>
                      </tr>
@@ -213,52 +190,11 @@
 
             </form>
 
+
+
+
             <!-- Scripts -->
             
-            <!-- 아이디 중복체크 버튼 클릭했을때 -->
-			<script type="text/javascript">
-				function idCheck() {
-					// 1. 입력한 id 가져오기
-					let user_id = $('input[name=user_id]').val();
-					console.log(user_id);
-
-					// 2. ajax로 id 보내기(IdCheckServiceCon)
-					$.ajax({
-						url : 'IdCheckServiceCon.do', /* 어디로 보낼지*/
-						type : 'post',
-						data : { /* 입력한 id data보내기 */
-							user_id : user_id
-						},
-						dataType : "text", /* 중복체크 결과값 text로 받아오기 */
-						success : function(result) {
-							//alert('성공');
-							if (result == 'false') {
-								// 중복 X
-								$('#idcheck').html('중복되는 아이디가 없습니다.');
-							} else {
-								// 중복 O
-								$('#idcheck').html('이미 사용중인 아이디입니다.');
-							}
-						},
-						error : function() {
-							alert('실패');
-						}
-
-					});
-				};
-				</script>
-				
-				<!-- 복지사, 보호자 토글 기능 -->
-				<script type="text/javascript">
-					function push0() {
-						$('.comp').show();
-					}
-					function push1() {
-						$('.comp').hide();
-					}
-				</script>
-     
-     
     		<!-- 주소 관련 scripts -->
      		<script>
     			// 본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 
@@ -340,7 +276,7 @@
 
             <!-- 비밀번호 일치 로직 + 불일치 시 전달 막기  제어 -->
             <script type="text/javascript">
-		      $(function() {
+            $(function() {
 		         $("#alert-success").hide();
 		         $("#alert-danger").hide();
 		         $("input").keyup(function() {
@@ -359,9 +295,12 @@
 		            }
 		         });
 		      });
+            
   			</script>
-
-
+			
+			<script>
+			   
+			</script>
 			<script src="assets/js/jquery.min.js"></script>
             <script src="assets/js/jquery.dropotron.min.js"></script>
             <script src="assets/js/jquery.scrollex.min.js"></script>
@@ -372,7 +311,7 @@
             <script src="assets/js/bootstrap.js"></script>
             <script src="assets/js/bootstrap.min.js"></script>
 
-
+			
             <!-- awesome font -->
             <script src="https://kit.fontawesome.com/8b21a455c5.js"
                crossorigin="anonymous"></script>

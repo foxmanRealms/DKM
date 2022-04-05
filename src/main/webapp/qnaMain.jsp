@@ -1,19 +1,36 @@
+<%@page import="Model.QnaReplyDAO"%>
+<%@page import="Model.QnaReplyDTO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="Model.QnaDAO"%>
+<%@page import="Model.QnaDTO"%>
 <%@page import="Model.UserDTO"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>QnA</title>
+<title>Q & A</title>
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
+<script src="assets/js/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="assets/css/style.css" />
+<style>
+table, th, tr, td{
+	text-align: center !important;
+}
+</style>
 </head>
 <body class="is-preload">
 	
 	<%
+		// 회원
 		UserDTO udto = (UserDTO)session.getAttribute("udto");
+	
+		// 문의글
+		ArrayList<QnaDTO> qlist = new QnaDAO().selectQnaAll();
+		
 	%>
 
 	<div id="page-wrapper">
@@ -68,37 +85,81 @@
 		<section id="main" class="container">
 			<header>
 				<h2>커뮤니티</h2>
-				<p>문의하기 게시판</p>
+				<p>Q & A</p>
 			</header>
 			<div class="box">
-				<div class="row">
-					<div class="row-6 row-12-mobilep">
-						<table>
-							<thead>
-								<th>문의하기</th>
-							</thead>
-							<tbody>
+				<div class="row-6 row-12-mobilep">
+					<table>
+						<thead>
+							<th></th> <!-- 번호 출력 -->
+							<th>제목</th>
+							<th>작성자</th>
+							<th>작성일</th>
+							<th>처리 상태</th>
+							<th>공개 여부</th>
+							<th>조회수</th>
+						</thead>
+						
+						<tbody>
+						<!-- 문의글 번호 -->
+						<% int num = 1;%>
+						<% for(QnaDTO q : qlist){ %>
+							<% 
+								int qna_seq = q.getQna_seq();
+								ArrayList<QnaReplyDTO> qRelist = new QnaReplyDAO().selectQnaReply(q.getQna_seq());
+							%>
+							<tr>
+								<td><%= num %></td>
+							<!-- 비밀글 제목 제어 -->
+							<% if(q.getQna_title().contains("secret")){ %>
+								<!-- 관리자와 비밀글 작성자만 접근 가능 -->
+								<% if(udto.getUser_id().equals("admin")|| udto.getUser_id().equals(q.getQna_id())) { %>
+								<td><a href="qnaSelect.jsp?qna_seq=<%= q.getQna_seq() %>">
+									<%= q.getQna_title().substring(6) %></a></td>
+								
+								<%} else{ %>
+								<td onclick="secret()"><a href="#"><%= q.getQna_title().substring(6) %></a></td>
+									
+								<%} %>
+							<%} else{ %>
+								<td><a href="qnaSelect.jsp?qna_seq=<%= q.getQna_seq() %>">
+									<%= q.getQna_title() %></a></td>
+							<%} %>
+								<td><%= q.getQna_id() %></td>
+								<td><%= q.getQna_joindate().split(" ")[0] %></td>
 							
-							</tbody>
+							<!-- 처리 상태 제어 -->	
+							<% if(!qRelist.isEmpty()){ %>
+								<td><i class="fa-solid fa-circle-check"></i></td>
+							<%} else { %>
+								<td><i class="fa-solid fa-spinner"></i></td>
+							<%}  %>
+							
+							<!-- 공개 여부 제어 -->	
+							<% if(q.getQna_title().contains("secret")){ %>
+								<td><i class="fa-solid fa-lock"></i></td>
+							<%} else{%>
+								<td></td>
+								<!-- <td><i class="fa-solid fa-lock-open"></i></td> -->
+							<%} %>
+								<td><%= q.getQna_cnt() %></td>
+							</tr>
+						<% num++; } %>
+						</tbody>
+					</table>
 
-			
-						</table>
-
-						<div >
-							<a href="qnaWrite.jsp" class="button special" style="align:right">글쓰기</a>
+					<div>
+						
+						<% if(udto != null){ %>
+							<a href="qnaWrite.jsp" class="button special" style="float:right">글쓰기</a>
+						<%} %>
+						
+						<div class="task-tabs">
+						<input type="text" id="search" placeholder="제목만"/>
+						<input type="submit" id="btn" value="검색" class="small" style="float:right;" onclick="search()"/>
 						</div>
-							
-						<form method="post" action="#">
-							<div class="row gtr-uniform gtr-50">
-								<div class="col-9 col-12-mobilep">
-									<input type="text" name="query" id="query" value=""/>
-								</div>
-								<div class="col-3 col-12-mobilep">
-									<input type="submit" value="검색"/>
-								</div>
-							</div>
-						</form>
-
+					</div>
+				
 				</div>
 			</div>
 		</section>
@@ -127,8 +188,35 @@
 		</footer>
 
 	</div>
+	
+	
 
 	<!-- Scripts -->
+	<script type="text/javascript">
+	
+	<!-- 검색 기능 -->
+	isShow= true;
+	function search(){
+		if(isShow){
+			isShow = false;
+			$('tbody').hide();
+			$('input#btn').val('전체')
+		} else{
+			isShow = true;
+			$('tbody').show();
+			$('input#btn').val('검색')
+		}
+	}
+	
+
+	<!-- 비밀글 제어 -->
+	function secret() {
+		alert("비밀글은 작성자만 확인할 수 있습니다!");
+	}
+
+	
+	</script>
+	
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>
 	<script src="assets/js/jquery.scrollex.min.js"></script>

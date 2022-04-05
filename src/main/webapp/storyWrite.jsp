@@ -81,7 +81,7 @@
 							
 								<div class="col-12">
 									<input type="text" name="story_title" placeholder="제목을 작성해 주세요."/>
-									<input type="hidden" name="user_id" value="<%= udto.getUser_name() %>"/>
+									<input type="hidden" name="user_id" value="<%= udto.getUser_id()%>"/>
 									<input type="hidden" name="story_cnt" value=0>
 									<input type="hidden" name="story_like" value=0>
 								</div>

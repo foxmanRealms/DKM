@@ -78,9 +78,7 @@
 					<!-- 실사용자 이름 출력 (수정 필요)-->
 					<strong>고점례</strong>님, 약 보관함 페이지입니다.
 				</h4>
-				<span><img src="images/med_box.png"
-					style="width:50%; display: block; margin: 0px auto; " alt="" />
-				</span>
+				<span></span>
 			</header>
 			
 			
@@ -96,7 +94,7 @@
 			                        <i class="fa-solid fa-check"></i> &nbsp;&nbsp;8번보관함(복용약 ex.타이레놀,종합약 등)<br>- 하루 최대 복용가능 횟수를 기재 해 주세요.</td>
 			                     </tr>
 
-			                     <tr>
+			                     <tr id = "colSize">
 			                        <td align="center">&nbsp;&nbsp;&nbsp;&nbsp;함&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			                        <td align="center">약 이름</td> <!-- med_box -->
 			                        <td align="center">처방 의료 기관</td> <!-- med_hosp -->
@@ -108,7 +106,7 @@
 		                     </thead>
 		                     
 		                     
-		                     <tbody>
+		                     <tbody id = "data_list">
 			                     <tr>
 			                        <td align="center">1</td>
 			                        <td bgcolor="white"><input type="text" name="med_box1"
@@ -204,8 +202,8 @@
 			                           
 			                        <td><input type="text" name="med_alert7" style="width: 170px;"></td>   
 			                        <td><input type="date" name="med_date7"></td>    
-			                        <td><input type="date" name="med_visit6" style="margin-left:15px"></td> 
-                                    <td><input type="time" name="med_alarm6" style="margin-left:15px"></td>    
+			                        <td><input type="date" name="med_visit7" style="margin-left:15px"></td> 
+                                    <td><input type="time" name="med_alarm7" style="margin-left:15px"></td>    
 			                    </tr>
 			                    
 			                    <tr>
@@ -218,13 +216,13 @@
 			                           
 			                        <td><input type="text" name="med_alert8" style="width: 170px;"></td>   
 			                        <td><input type="date" name="med_date8"></td>    
-			                        <td><input type="date" name="med_visit6" style="margin-left:15px"></td> 
-                                    <td><input type="time" name="med_alarm6" style="margin-left:15px"></td>    
+			                        <td><input type="date" name="med_visit8" style="margin-left:15px"></td> 
+                                    <td><input type="time" name="med_alarm8" style="margin-left:15px"></td>    
 			                    </tr>
 			                    
 			                      <tr>
 			                        <td colspan="7" align="center">
-			                        <input type="submit" value="등록 완료">
+			                        <input type="button" onclick="input()" value="등록"> 
 			                        <input type="reset" value="초기화" class="button alt">
 			                        </td> 
 			                     </tr>
@@ -232,7 +230,22 @@
 							
 						</table>
 			
-			  
+			  			<script>
+			  			function input(){
+			  				var trList = $("#data_list").children("tr")
+			  				for (var i=0;i<trList.length;i++) {
+			  					
+			  					var tdArr = trList.eq(i).find("td");
+			  					var history_income_type = tdArr.eq(0).find("input").val();.// 수익 카테고리
+			  					var history_income_money = tdArr.eq(1).find("input").val();.// 수입 총액
+			  					var history_income_remark = tdArr.eq(2).find("input").val();.// 주목
+
+			  					alert(history_income_type);
+			  					alert(history_income_money);
+			  					alert(history_income_remark);
+			  				}
+			  			}
+			  			</script>
 					</div>
 				</div>
 			

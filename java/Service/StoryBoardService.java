@@ -61,13 +61,13 @@ public class StoryBoardService implements Command{
 			
 			
 			// 아이디도 같이 보내기 
-			int cnt = new StoryDAO().insertBoard(stdto, user_id);
+			int cnt = new StoryDAO().insertBoard(stdto);
 			
 			if(cnt > 0) {
-				System.out.println("글 업로드 성공!");
+				System.out.println("정보글 작성 성공!");
 				
 			} else {
-				System.out.println("글 업로드 실패!");
+				System.out.println("정보글 작성 실패!");
 			}
 			
 		} catch (Exception e) {

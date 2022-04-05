@@ -23,8 +23,10 @@ table, th, tr, td{
 <body class="is-preload">
 	
 	<%
+		// 회원
 		UserDTO udto = (UserDTO)session.getAttribute("udto");
 		
+		// 게시글 리스트
 		ArrayList<StoryDTO> list = new StoryDAO().selectBoardAll();
 	%>
 
@@ -74,7 +76,7 @@ table, th, tr, td{
 				</ul>
 			</nav>
 		</header>
-
+	
 
 		<!-- Main -->
 		<section id="main" class="container">
@@ -168,9 +170,7 @@ table, th, tr, td{
 			$('input#btn').val('검색')
 		}
 	}
-	
 	</script>
-	
 	
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>

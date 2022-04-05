@@ -11,7 +11,7 @@ import Inter.Command;
 import Model.handiDAO;
 import Model.handiDTO;
 
-public class RegHandiService implements Command{
+public class RegMediboxService implements Command{
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

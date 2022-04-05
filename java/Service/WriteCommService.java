@@ -12,7 +12,7 @@ import Inter.Command;
 import Model.CommDAO;
 import Model.CommDTO;
 
-public class CommService implements Command {
+public class WriteCommService implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response)

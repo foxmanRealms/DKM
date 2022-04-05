@@ -118,9 +118,9 @@
 								<td>
 									<div class="col-4 col-12-narrower">
 										<input type="radio" id="user_gender0" name="h_gender"
-											value="male" checked> <label for="user_gender0">남자</label>
+											value="M" checked> <label for="user_gender0">남자</label>
 										<input type="radio" id="user_gender1" name="h_gender"
-											value="female"> <label for="user_gender1">여자</label>
+											value="F"> <label for="user_gender1">여자</label>
 									</div>
 								<td>
 							</tr>
@@ -140,7 +140,7 @@
 									<span id="guide" style="color: #999; display: none"></span> 
 									<input type="text" id="re_detailAddress" name="re_detailAddress" placeholder="상세주소"> 
 									<input type="hidden" id="re_extraAddress" name="re_extraAddress" placeholder="법정동">
-									<input type="hidden" name="user_id" value="<%= udto.getUser_name() %>"/>
+									<input type="hidden" name="user_id" value="<%= udto.getUser_id() %>"/>
 								</td>
 							</tr>
 

@@ -9,6 +9,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="assets/css/toggle.css">
 </head>
 <body class="is-preload">
 	
@@ -75,24 +76,51 @@
 				<div class="row"> 
 					<div class="row-6 row-12-mobilep">
 						<!-- Form -->
-						<form action="StoryBoardServiceCon.do" method="post" enctype="multipart/form-data">
+						<form action="QnaBoardServiceCon.do" method="post" enctype="multipart/form-data">
 							<div class="row gtr-uniform gtr-50">
 								<blockquote><h3>글쓰기</h3></blockquote>
 							
 								<div class="col-12">
-									<input type="text" name="story_title" placeholder="제목을 작성해 주세요."/>
-									<input type="hidden" name="user_id"/>
-									<input type="hidden" name="story_joindate"/>
+									<input type="text" name="qna_title" placeholder="제목을 작성해 주세요."/>
+									<input type="hidden" name="qna_id" value="<%= udto.getUser_id()%>"/>
 								</div>
 								
 								<div class="col-12">
-									<input name="story_file" type="file" style="float: right;"/>
+									<input name="qna_file" type="file" style="float: right;"/>
 								</div>
 								
 								<div class="col-12">
-									<textarea name="story_content" placeholder="내용을 작성해 주세요." rows="6"></textarea>
+									<textarea name="qna_content" placeholder="내용을 작성해 주세요." rows="6"></textarea>
 								</div>
+								
+								
+								<!-- 비밀글 토글 -->
 								<div class="col-12">
+									<div style="float:right; margin-right:10px">
+										<label class="switch">
+									        <input type="checkbox" onclick="toggle(this)"/>
+									        <span class="slider round"></span><br><br>
+									        <p class="check"></p>
+									    </label>
+									</div>
+									<span style="float:right; margin: 5px">비밀글로 작성</span>	
+									<input type="hidden" name="secret" id="checked" value="" />
+								</div>
+									
+								<!-- 토글 기능 -->
+							    <script>
+							        function toggle(element){
+							        	console.log(element.checked);
+							            let res = element.checked;
+							            
+							            if(res == true){
+											$('#checked').val('secret')						            
+							            }
+							        }
+							    </script>
+							    
+								<div class="col-12">
+								    
 									<ul class="actions">
 										<li><input type="submit" value="작성"/></li>
 										<li><input type="reset" value="초기화" class="alt" /></li>

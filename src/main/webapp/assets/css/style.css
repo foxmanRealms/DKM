@@ -42,7 +42,7 @@
 }
 
 #modal .modal-window {
-   background: rgba(69, 139, 197, 0.70);
+   background: whitesmoke;
    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
    backdrop-filter: blur(13.5px);
    -webkit-backdrop-filter: blur(13.5px);
@@ -80,4 +80,44 @@
    padding: 0px 10px;
    text-shadow: 1px 1px 2px gray;
    color: white;
+}
+
+
+
+
+/* 문의하기 답변 조회창*/
+.reply {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    display: block;
+    width: 950px;
+    height: 80px;
+    padding-top: 10px;
+    padding-left: 20px;
+    background-color: whitesmoke;
+    border-radius: 20px;
+} 
+@media ( max-width: 950px ) {
+  .reply {
+     width: auto;
+  }
+
+
+/* 문의하기 답변 제목 */
+.rep_title {
+	width:500px; 
+	margin-bottom:10px;
+}
+@media ( max-width: 500px ) {
+  .rep_title {
+     width: auto;
+  }
+}
+@media ( max-margin-bottom: 10px ) {
+  .rep_title {
+     margin-bottom: auto;
+  }
+}
 }

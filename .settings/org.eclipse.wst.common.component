@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Project">
+                
+    
+    
+    <wb-module deploy-name="DKM_fork">
+                                
+        
+        
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <property name="context-root" value="Project"/>
-        <property name="java-output-path" value="/Project/build/classes"/>
+                                
+        
+        
+        <property name="java-output-path" value="/DKM_fork/build/classes"/>
+                        
+        
+        <property name="context-root" value="DKM_fork"/>
+                            
+    
+    
     </wb-module>
+            
+
+
 </project-modules>

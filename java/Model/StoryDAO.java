@@ -23,9 +23,9 @@ public class StoryDAO {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
 			// 1-2. DB에 접속하기 위한 주소, 아이디, 패스워드 지정
-			String url = "jdbc:oracle:thin:@localhost:1521:xe";
-			String db_id = "hr";
-			String db_pw = "hr";
+			String url = "jdbc:oracle:thin:@project-db-stu.ddns.net:1524:xe";
+			String db_id = "campus_b_0310_1";
+			String db_pw = "smhrd1";
 			
 			// 1-3. Connection 객체 사용해서 DB연결!
 			conn = DriverManager.getConnection(url, db_id, db_pw);
@@ -62,7 +62,7 @@ public class StoryDAO {
 	*/
 	
 	// 게시글 작성 메소드
-	public int insertBoard(StoryDTO stdto, String user_id) { 
+	public int insertBoard(StoryDTO stdto) { 
 		dbConn();
 		
 		try {
@@ -71,7 +71,7 @@ public class StoryDAO {
 			psmt.setString(1, stdto.getStory_title());
 			psmt.setString(2, stdto.getStory_content());
 			psmt.setString(3, stdto.getStory_file());
-			psmt.setString(4, user_id);
+			psmt.setString(4, stdto.getUser_id());
 			psmt.setInt(5, stdto.getStory_cnt());
 			psmt.setInt(6, stdto.getStory_like());
 			
@@ -167,5 +167,108 @@ public class StoryDAO {
 			dbClose();
 		} return cnt;
 	}
+
+	// 게시글 수정 메소드
+	public int updateBoardOne(StoryDTO stdto) {
+		dbConn();
+		try {
+			sql = "update t_story set story_title = ?, story_content = ?, story_file = ? where story_seq = ?";
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, stdto.getStory_title());
+			psmt.setString(2, stdto.getStory_content());
+			psmt.setString(3, stdto.getStory_file());
+			psmt.setInt(4, stdto.getStory_seq());
+			cnt = psmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return cnt;
+	}
 	
+	// 게시글 삭제 메소드
+	public int deleteBoardOne(int story_seq) {
+		dbConn();
+		try {
+			sql = "delete from t_story where story_seq = ?";
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, story_seq);
+			cnt = psmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return cnt;
+	}
+	
+	// 게시글 좋아요 업데이트 메소드
+	public int updateLike(int story_seq, int story_like) {
+		dbConn();
+		try {
+			sql = "update t_story set story_like = ? where story_seq = ?";
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, story_like);
+			psmt.setInt(2, story_seq);
+			cnt = psmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return cnt;
+	}
+	
+	// 총 좋아요 수 조회 메소드
+	public int totalLike(int story_seq) {
+		dbConn();
+		try {
+			sql = "select count(*) from t_story where story_seq = ?";
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, story_seq);
+			rs = psmt.executeQuery();
+			if(rs.next()) {
+				cnt = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return cnt;
+	}
+	
+	
+	// 내가 쓴 게시글 목록 조회 메소드
+		public ArrayList<StoryDTO> myBoardAll(String user_id){
+			dbConn();
+			
+			ArrayList<StoryDTO> stlist = new ArrayList<>();
+			try {
+				sql = "select * from t_story where user_id = ? order by story_joindate desc";
+				
+				psmt = conn.prepareStatement(sql);
+				psmt.setString(1, user_id);
+				rs = psmt.executeQuery();
+
+				while(rs.next()) {
+					int story_seq = rs.getInt(1);
+					String story_title = rs.getString(2);
+					String story_content = rs.getString(3);
+					String story_joindate = rs.getString(5);
+					user_id = rs.getString(6);
+					int story_cnt = rs.getInt(7);
+					int story_like = rs.getInt(8);
+					
+					StoryDTO stdto = new StoryDTO(story_seq, story_title, story_content, "", story_joindate, user_id, story_cnt, story_like);
+					stlist.add(stdto);
+				};
+						
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				dbClose();
+			} return stlist;
+		}
 }

@@ -22,9 +22,9 @@ public class handiDAO {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 
 			// 1-2. DB에 접속하기 위한 주소, 아이디, 패스워드 지정
-			String url = "jdbc:oracle:thin:@localhost:1521:xe";
-			String db_id = "hr";
-			String db_pw = "hr";
+			String url = "jdbc:oracle:thin:@project-db-stu.ddns.net:1524:xe";
+			String db_id = "campus_b_0310_1";
+			String db_pw = "smhrd1";
 
 			// 1-3. Connection 객체 사용해서 DB연결!
 			conn = DriverManager.getConnection(url, db_id, db_pw);
@@ -52,17 +52,24 @@ public class handiDAO {
 		dbConn();
 		
 		try {
-			sql = "insert into t_story values(T_HANDICAPED_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
+			sql = "insert into t_handicaped values(T_HANDICAPED_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(2, hdto.getH_name());
-			psmt.setString(3, hdto.getH_relationship());
-			psmt.setString(4, hdto.getH_birthdate());
-			psmt.setString(5, hdto.getH_addr());
-			psmt.setString(6, hdto.getH_gender());
-			psmt.setString(7, hdto.getH_phone());
-			psmt.setString(8, hdto.getUser_id());
+			psmt.setString(1, hdto.getH_name());
+			psmt.setString(2, hdto.getH_relationship());
+			psmt.setString(3, hdto.getH_birthdate());
+			psmt.setString(4, hdto.getH_addr());
+			psmt.setString(5, hdto.getH_gender());
+			psmt.setString(6, hdto.getH_phone());
+			psmt.setString(7, hdto.getUser_id());
 			
 			cnt = psmt.executeUpdate();
+			
+			if(cnt>0) {
+				System.out.println("성공");
+			}
+			else {
+				System.out.println("실패");
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

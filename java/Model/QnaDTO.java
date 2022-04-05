@@ -1,7 +1,5 @@
 package Model;
 
-import java.sql.Date;
-
 public class QnaDTO {
 	
 	/*
@@ -19,7 +17,7 @@ public class QnaDTO {
 	 */
 
 	 // 질의 순번 
-    private Double qna_seq;
+    private int qna_seq;
 
     // 질의 제목 
     private String qna_title;
@@ -31,17 +29,17 @@ public class QnaDTO {
     private String qna_file;
 
     // 질의 작성일자 
-    private Date qna_joindate;
+    private String qna_joindate;
 
     // 질의 작성자 
     private String qna_id;
 
     // 질의 조회수 
-    private Double qna_cnt;
+    private int qna_cnt;
 
     
-	public QnaDTO(Double qna_seq, String qna_title, String qna_content, String qna_file, Date qna_joindate,
-			String qna_id, Double qna_cnt) {
+	public QnaDTO(int qna_seq, String qna_title, String qna_content, String qna_file, String qna_joindate,
+			String qna_id, int qna_cnt) {
 		super();
 		this.qna_seq = qna_seq;
 		this.qna_title = qna_title;
@@ -53,11 +51,11 @@ public class QnaDTO {
 	}
 
 	
-	public Double getQna_seq() {
+	public int getQna_seq() {
 		return qna_seq;
 	}
 
-	public void setQna_seq(Double qna_seq) {
+	public void setQna_seq(int qna_seq) {
 		this.qna_seq = qna_seq;
 	}
 
@@ -85,11 +83,11 @@ public class QnaDTO {
 		this.qna_file = qna_file;
 	}
 
-	public Date getQna_joindate() {
+	public String getQna_joindate() {
 		return qna_joindate;
 	}
 
-	public void setQna_joindate(Date qna_joindate) {
+	public void setQna_joindate(String qna_joindate) {
 		this.qna_joindate = qna_joindate;
 	}
 
@@ -101,11 +99,11 @@ public class QnaDTO {
 		this.qna_id = qna_id;
 	}
 
-	public Double getQna_cnt() {
+	public int getQna_cnt() {
 		return qna_cnt;
 	}
 
-	public void setQna_cnt(Double qna_cnt) {
+	public void setQna_cnt(int qna_cnt) {
 		this.qna_cnt = qna_cnt;
 	}
     

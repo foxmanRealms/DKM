@@ -23,9 +23,9 @@ public class CommDAO {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
 			// 1-2. DB에 접속하기 위한 주소, 아이디, 패스워드 지정
-			String url = "jdbc:oracle:thin:@localhost:1521:xe";
-			String db_id = "hr";
-			String db_pw = "hr";
+			String url = "jdbc:oracle:thin:@project-db-stu.ddns.net:1524:xe";
+			String db_id = "campus_b_0310_1";
+			String db_pw = "smhrd1";
 			
 			// 1-3. Connection 객체 사용해서 DB연결!
 			conn = DriverManager.getConnection(url, db_id, db_pw);

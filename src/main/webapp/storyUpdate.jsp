@@ -1,10 +1,12 @@
+<%@page import="Model.StoryDAO"%>
+<%@page import="Model.StoryDTO"%>
 <%@page import="Model.UserDTO"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>내 정보 수정</title>
+<title>정보 공유 글 수정</title>
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -14,6 +16,8 @@
 	
 	<%
 		UserDTO udto = (UserDTO)session.getAttribute("udto");
+	
+		int story_seq = Integer.parseInt(request.getParameter("story_seq"));
 	%>
 
 	<div id="page-wrapper">
@@ -64,29 +68,48 @@
 		</header>
 
 
-
 		<!-- Main -->
 		<section id="main" class="container">
 			<header>
-				<h2>내 정보 수정</h2>
-				<p>정보 수정 페이지입니다.</p>
+				<h2>커뮤니티</h2>
+				<p>정보 공유</p>
 			</header>
+			
 			<div class="box">
-				<span class="image featured"><img src="images/pic01.jpg"
-					alt="" /></span>
-				<h3></h3>
-				<p></p>
-				<div class="row">
+				<div class="row"> 
 					<div class="row-6 row-12-mobilep">
+						<!-- Form -->
+						<form action="UpdateStoryServiceCon.do" method="post" enctype="multipart/form-data"> 
+							<div class="row gtr-uniform gtr-50">
+								<blockquote><h3>글 수정</h3></blockquote>
+							
+								<div class="col-12">
+									<input type="text" name="story_title" placeholder="제목을 수정해 주세요."/>
+									<input type="hidden" name="story_seq" value="<%= story_seq %>"/>
+								</div>
+								
+								<div class="col-12">
+									<input name="story_file" type="file" style="float: right;"/>
+								</div>
+								
+								<div class="col-12">
+									<textarea name="story_content" placeholder="내용을 수정해 주세요." rows="6"></textarea>
+								</div>
+								<div class="col-12">
+									<ul class="actions">
+										<li><input type="submit" value="글 수정" /></li>
+						</form> 
 						
+						<form action="DeleteStorySeriveCon.do?story_seq=<%= story_seq %>" method="post">
+										<li><input type="submit" value="글 삭제" class="alt"/></li>
+						</form>			
+									</ul>
+								</div>
+							</div>
 					</div>
-					
-
-					</div>
-				</div>
+				</div>  
 			</div>
 		</section>
-
 
 		<!-- Footer -->
 		<footer id="footer">
@@ -120,6 +143,11 @@
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
+	<script src="assets/js/bootstrap.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+
+	<!-- awesome font -->
+	<script src="https://kit.fontawesome.com/8b21a455c5.js" crossorigin="anonymous"></script>
 
 </body>
 </html>
