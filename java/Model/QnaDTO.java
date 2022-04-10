@@ -37,6 +37,9 @@ public class QnaDTO {
     // 질의 조회수 
     private int qna_cnt;
 
+    // 질의 답변 시퀀스
+    private int rep_seq;
+    
     
 	public QnaDTO(int qna_seq, String qna_title, String qna_content, String qna_file, String qna_joindate,
 			String qna_id, int qna_cnt) {
@@ -49,6 +52,21 @@ public class QnaDTO {
 		this.qna_id = qna_id;
 		this.qna_cnt = qna_cnt;
 	}
+	
+	// 질의 답변 추가 생성자
+	public QnaDTO(int qna_seq, String qna_title, String qna_content, String qna_file, String qna_joindate,
+			String qna_id, int qna_cnt, int rep_seq) {
+		super();
+		this.qna_seq = qna_seq;
+		this.qna_title = qna_title;
+		this.qna_content = qna_content;
+		this.qna_file = qna_file;
+		this.qna_joindate = qna_joindate;
+		this.qna_id = qna_id;
+		this.qna_cnt = qna_cnt;
+		this.rep_seq = rep_seq;
+	}
+
 
 	
 	public int getQna_seq() {

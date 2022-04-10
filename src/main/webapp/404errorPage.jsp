@@ -10,6 +10,7 @@
 <body>
 	<h3>요청하신 페이지는 존재하지 않습니다.</h3>
 	<h4>- Dr.Boksun</h4>
-	<a href="Index.jsp">초기화면으로 돌아갑니다</a>
+	<button><a href="Index.jsp">메인으로 이동</a></button>
+	<br>초기화면으로 돌아갑니다.
 </body>
 </html>

@@ -97,6 +97,70 @@ public class QnaDAO {
 			dbClose();
 		} return qlist;
 	}
+
+	
+	// 내 QnA 목록 조회 메소드
+	public ArrayList<QnaDTO> selectMyQnaAll(String qna_id){
+		dbConn();
+		ArrayList<QnaDTO> myqlist = new ArrayList<QnaDTO>();
+		try {
+			sql = "select qna_seq, qna_title, qna_joindate "
+					+ "from t_qna "
+					+ "where qna_id = ? "
+					+ "order by qna_joindate desc";
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, qna_id);
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+				int qna_seq = rs.getInt(1);
+				String qna_title = rs.getString(2);
+				String qna_joindate = rs.getString(3);
+
+				QnaDTO qdto = new QnaDTO(qna_seq, qna_title, "", "", qna_joindate, qna_id, 0);
+				myqlist.add(qdto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return myqlist;
+	}
+	
+	
+	// 내 QnA 답변 목록 조회 메소드
+	// 아우터 조인(+) : 사용자가 작성한 문의글 모두 조회, 답변 유무 구분을 위해
+	public ArrayList<QnaDTO> selectMyQnaReplyAll(String qna_id){
+		dbConn();
+		ArrayList<QnaDTO> myqRelist = new ArrayList<QnaDTO>();
+		try {
+			sql = "select a.qna_seq, a.qna_title, a.qna_joindate, b.rep_seq "
+					+ "from t_qna a, t_qna_reply b "
+					+ "where a.qna_id = ? "
+					+ "        and a.qna_seq = b.qna_seq(+) "
+					+ "order by a.qna_joindate desc";
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, qna_id);
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+				int qna_seq = rs.getInt(1);
+				String qna_title = rs.getString(2);
+				String qna_joindate = rs.getString(3);
+				int rep_seq = rs.getInt(4);
+				
+				QnaDTO qdto = new QnaDTO(qna_seq, qna_title, "", "", qna_joindate, qna_id, 0, rep_seq);
+				myqRelist.add(qdto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return myqRelist;
+	}
+
 	
 	
 	// QnA 상세페이지 조회 메소드

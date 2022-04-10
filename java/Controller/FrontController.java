@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Inter.Command;
 import Service.DeleteCommService;
+import Service.DeleteHandiService;
 import Service.DeleteQnaReplyService;
 import Service.DeleteQnaService;
 import Service.DeleteStoryService;
@@ -22,6 +23,9 @@ import Service.QnaBoardService;
 import Service.RegHandiService;
 import Service.RegMediboxService;
 import Service.SelectHandiService;
+import Service.SelectMediService;
+import Service.SelectQnaReplyService;
+import Service.SelectQnaService;
 import Service.StoryBoardService;
 import Service.StoryLikeService;
 import Service.UpdateInfoService;
@@ -72,18 +76,26 @@ public class FrontController extends HttpServlet {
 			com = new EditPwService();
 			nextpage = com.execute(request, response);
 		
-		// 장애인 등록 기능
+		// 장애인 정보 등록 기능
 		} else if(command.equals("RegHandiServiceCon.do")) {
 			com = new RegHandiService();
 			nextpage = com.execute(request, response);	
 			
+		// 장애인 정보 삭제 기능
+		} else if(command.equals("DeleteHandiServiceCon.do")) {
+			com = new DeleteHandiService();
+			nextpage = com.execute(request, response);	
 			
 		// 약 등록 기능
 		} else if(command.equals("RegMediboxServiceCon.do")) {
 			com = new RegMediboxService();
 			nextpage = com.execute(request, response);	
 			
-			
+			// 장애인 전체 조회 기능
+		}else if(command.equals("SelectMediServiceCon.do")) {
+			com = new SelectMediService();
+			nextpage = com.execute(request, response);	
+							
 		// 장애인 전체 조회 기능
 		}else if(command.equals("SelectHandiServiceCon.do")) {
 			com = new SelectHandiService();
@@ -143,6 +155,16 @@ public class FrontController extends HttpServlet {
 		// 문의 답변 삭제 기능
 		} else if(command.equals("DeleteQnaReplyServiceCon.do")) {
 			com = new DeleteQnaReplyService();
+			nextpage = com.execute(request, response);
+		
+		// 내 문의글 조회 기능
+		} else if(command.equals("SelectQnaServiceCon.do")) {
+			com = new SelectQnaService();
+			nextpage = com.execute(request, response);
+			
+		// 내 문의 답변 조회 기능
+		} else if(command.equals("SelectQnaReplyServiceCon.do")) {
+			com = new SelectQnaReplyService();
 			nextpage = com.execute(request, response);
 		
 		// 내 정보 수정 기능

@@ -11,6 +11,21 @@
 <link rel="stylesheet" href="assets/css/main.css" />
 <link rel="stylesheet" href="assets/css/style.css" />
 
+<style>
+@font-face {
+    font-family: 'GangwonEdu_OTFBoldA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+body{
+font-family: 'GangwonEdu_OTFBoldA';
+background-image:url('images/bgimg_1.png');
+background-size: 100% 100%;
+background-repeat: no-repeat;
+}
+</style>
+
 
 
 </head>
@@ -43,56 +58,47 @@
 
 		<!-- Header -->
 		<header id="header" class="alt">
-			<h1>
-				<a href="Index.jsp">복순이&nbsp;&nbsp;</a>by dr.boksun
+			<h1 style="color: black;font-size:xx-large;">
+				<a href="Index.jsp" style="color: black;">복순이&nbsp;&nbsp;</a>by dr.boksun
 			</h1>
 			
 			<nav id="nav" style="text-align:right;">
-			<!-- 유저 아이콘 -->
 			<!-- 봉투 아이콘 -->
-			<i class="fa-regular fa-envelope" style="color:white;margin-top:20px;"></i> 
+			<i class="fa-regular fa-envelope fa-2x" style="color:black;margin-top:20px;"></i> 
 			<!-- 하트 아이콘 -->
-			<i class="fa-solid fa-heart" style="color:white;margin-left:20px;"></i> 
+			<i class="fa-solid fa-heart fa-2x" style="color:red;margin-left:20px;"></i> 
 			<!-- 연필 아이콘 -->
-			<i class="fa-regular fa-pen-to-square" style="color:white;margin-left:20px;"></i> 
+			<i class="fa-regular fa-pen-to-square fa-2x" style="color:black;margin-left:20px;"></i> 
+			<!-- 유저 아이콘 -->
+			<i class="fa-solid fa-user fa-2x" style="color:gray;margin-left:20px;"></i>
 			
-			<i class="fa-solid fa-user" style="color:white;margin-left:20px;"></i>
-			<sup style="color:yellow;font-weight:500;font-size:small; vertical-align:sub;">User님 환영합니다!</sup>
+			<% if(udto != null){ %>
+				<sup style="color:green;font-weight:500;font-size:larger; vertical-align:sub;">
+				&nbsp;&nbsp;<%= udto.getUser_name() %>님 로그인</sup>
+			<%} else {%>
 			
+			<%} %>
 			
 				<ul>
-					<li><a href="Index.jsp">홈</a></li>
-					<li><a href="select_handi.jsp">정보 등록 및 조회&nbsp;&nbsp;&nbsp;<i
+					<li><a href="Index.jsp" style="color:#696969;font-size:xx-large;">홈</a></li>
+					<li><a href="select_handi.jsp" style="color:#696969;font-size:xx-large;">정보 등록 및 조회&nbsp;&nbsp;&nbsp;<i
 							class='icon solid fa fa-angle-down'></i>
 					</a>
 						<ul>
 							<li><a href="reg_handi.jsp">회원 정보 등록</a></li>
-							<li><a href="reg_box.jsp">보관함 등록 및 조회</a></li>
 						</ul></li>
-					<li class='sub-menu'><a href="#">커뮤니티&nbsp;&nbsp;&nbsp;<i
+					<li class='sub-menu'><a href="#" style="color:#696969;font-size:xx-large;">커뮤니티&nbsp;&nbsp;&nbsp;<i
 							class='fa fa-angle-down'></i></a>
 						<ul>
 							<li><a href="qnaMain.jsp">문의하기</a></li>
 							<li><a href="storyMain.jsp">정보 공유</a></li>
 						</ul></li>
-					<li class='sub-menu'><a href="Mypage.jsp">마이페이지&nbsp;&nbsp;&nbsp;<i
-							class='fa fa-angle-down'></i></a>
-						<ul>
-							<li><a href="update_info.jsp">내 정보 수정</a></li>
-							
-							<% if(udto != null){ %>
-								<li><a href="edit_pw_next.jsp?user_id=<%= udto.getUser_id()%>">비밀번호 재설정</a></li>
-							<%} else{ %>
-								<li><a href="edit_pw.jsp">비밀번호 변경</a></li>
-							<%} %>
-							<li><a href="select_user0.jsp">담당 복지사 조회</a></li>
-							<li><a href="select_user1.jsp">보호자 조회</a></li>
-						</ul></li>
+					<li class='sub-menu'><a href="Mypage.jsp" style="color:#696969;font-size:xx-large;">마이페이지</a></li>
 
 					<% if(udto != null){ %>
-						<li><a href="LogoutServiceCon.do" class="button">로그아웃</a></li>
+						<li><a href="LogoutServiceCon.do" class="button" style="color: black;font-size:xx-large;">로그아웃</a></li>
 					<%} else{%>
-						<li><a href="Login.jsp" class="button">로그인</a></li>
+						<li><a href="Login.jsp" class="button" style="color:#816259;font-size:xx-large;">로그인</a></li>
 					<%} %>
 
 				</ul>
@@ -102,25 +108,41 @@
 
 		<!-- Banner -->
 		<section id="banner">
-			<h2>당신 곁에, 복순이</h2>
-			<p>
+		 
+		 <!-- CTA -->	
+		 <section id="cta" style="margin-bottom: 500px;height: 550px;">
+			<h2 style="color:white;">당신 곁에, 복순이</h2>
+			<p style="color:white;font-size:xx-large;">
 				버튼만 누르면 먹을 약을 알려주는<br>스마트한 약 보관함
 			</p>
 
 			<% if(udto != null){ %>
-			<h3 style="color: black"><%= udto.getUser_name() %>님 반갑습니다.
+			<h3 class="big-font" style="color:white;display: inline;"><%= udto.getUser_name() %>님 반갑습니다.
 			</h3>
-			<a href="Explain.jsp" class="button">제품 설명 및 사용 방법</a>
+			<br><br>
+			<a href="Explain.jsp" class="button" style="color:#671909;border-radius:50px;font-size: xx-large;">제품 설명 및 사용 방법</a>
 			</li>
 			<%} else{%>
-			<a href="Join.jsp" class="button primary">가입하기</a>
-			</li> <a href="Explain.jsp" class="button">제품 설명 및 사용 방법</a>
+			<a href="Join.jsp" class="button primary" style="margin-top: 100px;min-width:7em;border-radius:50px;font-size: xx-large;">가입하기</a>
+			</li> <a href="Explain.jsp" class="button"style="color:#671909;border-radius:50px;font-size: xx-large;">제품 설명 및 사용 방법</a>
 			</li>
 			<%} %>
+      <!--    <h2>복순이</h2>
+         <p>복순이 서비스를 이용하세요!</p>
 
-
-		</section>
-
+         <form>
+            <div class="row gtr-50 gtr-uniform">
+               <div class="col-8 col-12-mobilep">
+                  <input type="email" name="email" id="email"
+                     placeholder="Email Address" />
+               </div>  
+               <div class="col-4 col-12-mobilep">
+                  <input type="submit" value="Sign Up" class="fit" />
+               </div>
+            </div>
+         </form>-->
+	</section>
+</section>
 		<!-- Main -->
 		
 		<!--모달 본문  -->
@@ -144,7 +166,7 @@
             mo_content = "가입을 환영합니다";
          } else if (check.equals("1") && status.equals("2")) {
             System.out.println("[가입실패] " + status);
-            mo_title = "회원가입 실패";
+            mo_title = "가입 실패";
             mo_content = "양식을 다시 한번 확인해주세요";
          } else if (check.equals("1") && status.equals("3")) {
             System.out.println("[3진입] " + status);
@@ -217,34 +239,19 @@
 		};
 		</script>
 		
-		
-	
-	
 
-
-		<!-- CTA -->
-		<section id="cta">
-
-			<h2>복순이</h2>
-			<p>복순이 서비스를 이용하세요!</p>
-
-			<form>
-				<div class="row gtr-50 gtr-uniform">
-					<div class="col-8 col-12-mobilep">
-						<input type="email" name="email" id="email"
-							placeholder="Email Address" />
-					</div>
-					<div class="col-4 col-12-mobilep">
-						<input type="submit" value="Sign Up" class="fit" />
-					</div>
-				</div>
-			</form>
-
-		</section>
-
-
+  	<footer id="footer" style="padding:3em 0 3em 0;">
+  		<div class="inner">
+  		<a href="#" class="page-top" style="position: relative;left:350px;">위로가기</a>
+  		<p style="margin:0 0 0 0;">전화: 062-655-3506, 9</p>
+  		<p style="margin:0 0 0 0;">주소: 광주 동구 예술길 31-15, 3층</p>
+  		<span><img src="images/logo.png" style="width:100px;"></span><br>
+  			<p class="copyright" style="margin:0 0 0 0;">copyrightⓒ 2022 All rights reserved by Team.boksun</p>
+		</div>
+  	</footer>
+  		
 		<!-- Footer -->
-		<footer id="footer">
+	<!-- <footer id="footer">
 			<ul class="icons">
 				<li><a href="#" class="icon brands fa-twitter"><span
 						class="label">Twitter</span></a></li>
@@ -263,7 +270,7 @@
 				<li>&copy; Untitled. All rights reserved.</li>
 				<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 			</ul>
-		</footer>
+		</footer>   -->	
 
 	</div>
 
