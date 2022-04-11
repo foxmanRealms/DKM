@@ -123,7 +123,7 @@ background-repeat: no-repeat;
 			<a href="Explain.jsp" class="button" style="color:#671909;border-radius:50px;font-size: xx-large;">제품 설명 및 사용 방법</a>
 			</li>
 			<%} else{%>
-			<a href="Join.jsp" class="button primary" style="margin-top: 100px;min-width:7em;border-radius:50px;font-size: xx-large;">가입하기</a>
+			<a href="Join.jsp" class="button" style="margin-top: 100px;min-width:7em;border-radius:50px;font-size: xx-large;color: #671909;">가입하기</a>
 			</li> <a href="Explain.jsp" class="button"style="color:#671909;border-radius:50px;font-size: xx-large;">제품 설명 및 사용 방법</a>
 			</li>
 			<%} %>
