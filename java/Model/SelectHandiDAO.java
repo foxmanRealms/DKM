@@ -91,5 +91,4 @@ public class SelectHandiDAO {
 			} 
 			return list;
 		}
-	
 }

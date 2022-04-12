@@ -77,4 +77,21 @@ public class handiDAO {
 			dbClose();
 		} return cnt;
 	}
+	
+	public int deleteHandi(int seq) {
+		dbConn();
+		
+		try {
+			sql = "delete from t_handicaped where h_seq = ?";
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, seq);
+			
+			cnt = psmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbClose();
+		} return cnt;
+	}
 }

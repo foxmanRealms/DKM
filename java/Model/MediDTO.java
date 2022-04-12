@@ -13,15 +13,14 @@ public class MediDTO {
     med_hosp        VARCHAR2(50)     NULL, 
     med_way         VARCHAR2(50)     NULL, 
     med_date        DATE             NULL, 
-    med_exp_date    DATE             NULL, 
     med_visit       DATE             NULL, 
-    med_alarm       VARCHAR2(30)     NULL, 
-     PRIMARY KEY (h_seq)
+    med_alarm       VARCHAR2(30)     NULL,
+    med_update      DATE     		 NULL,  
 ); 
 	 */
 	
 	// 장애인 순번 
-    private Double h_seq;
+    private int h_seq;
 
     // 보관함번호 
     private String med_num;
@@ -36,20 +35,20 @@ public class MediDTO {
     private String med_way;
 
     // 처방일자 
-    private Date med_date;
-
-    // 약 유통기한 
-    private Date med_exp_date;
-
-    // 병원재방문일자 
-    private Date med_visit;
+    private String med_date;
 
     // 복용시간알람 
     private String med_alarm;
     
+    private String user_id;
+    
+    
+	public MediDTO() {
+		super();
+	}
 
-	public MediDTO(Double h_seq, String med_num, String med_name, String med_hosp, String med_way, Date med_date,
-			Date med_exp_date, Date med_visit, String med_alarm) {
+	public MediDTO(int h_seq, String med_num, String med_name, String med_hosp, String med_way, String med_date,
+			 String med_alarm, String user_id) {
 		super();
 		this.h_seq = h_seq;
 		this.med_num = med_num;
@@ -57,17 +56,16 @@ public class MediDTO {
 		this.med_hosp = med_hosp;
 		this.med_way = med_way;
 		this.med_date = med_date;
-		this.med_exp_date = med_exp_date;
-		this.med_visit = med_visit;
 		this.med_alarm = med_alarm;
+		this.user_id = user_id;
 	}
 
 	
-	public Double getH_seq() {
+	public int getH_seq() {
 		return h_seq;
 	}
 
-	public void setH_seq(Double h_seq) {
+	public void setH_seq(int h_seq) {
 		this.h_seq = h_seq;
 	}
 
@@ -103,28 +101,12 @@ public class MediDTO {
 		this.med_way = med_way;
 	}
 
-	public Date getMed_date() {
+	public String getMed_date() {
 		return med_date;
 	}
 
-	public void setMed_date(Date med_date) {
+	public void setMed_date(String med_date) {
 		this.med_date = med_date;
-	}
-
-	public Date getMed_exp_date() {
-		return med_exp_date;
-	}
-
-	public void setMed_exp_date(Date med_exp_date) {
-		this.med_exp_date = med_exp_date;
-	}
-
-	public Date getMed_visit() {
-		return med_visit;
-	}
-
-	public void setMed_visit(Date med_visit) {
-		this.med_visit = med_visit;
 	}
 
 	public String getMed_alarm() {
@@ -134,9 +116,15 @@ public class MediDTO {
 	public void setMed_alarm(String med_alarm) {
 		this.med_alarm = med_alarm;
 	}
-    
-    
 
-	
+
+	public String getUser_id() {
+		return user_id;
+	}
+
+
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
 
 }

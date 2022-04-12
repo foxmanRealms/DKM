@@ -2,49 +2,77 @@ package Service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import Inter.Command;
-import Model.handiDAO;
-import Model.handiDTO;
+import Model.MediDAO;
+import Model.MediDTO;
+import Model.SelectHandiDAO;
 
 public class RegMediboxService implements Command{
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		System.out.println("[RegHandiServiceCon.do]");
+		System.out.println("[RegMediboxServiceCon.do]");
 		
 		request.setCharacterEncoding("UTF-8");	
 		
-		String h_relationship = request.getParameter("hRelation");
-		String h_name = request.getParameter("hName");
-		String h_birthdate = request.getParameter("hBirth");
-		String h_gender = request.getParameter("hGender");
-		String h_phone = request.getParameter("hPhone");
-		String h_roadAddress = request.getParameter("hRoadAdr");
-		String h_detailAddress = request.getParameter("hDetailAdr");
-		String h_Addr = h_roadAddress + " " + h_detailAddress;
-		String user_id = request.getParameter("user_id");
+		String func = request.getParameter("func");
+		String json = request.getParameter("json");
 		
-		handiDTO hdto = new handiDTO(h_name, h_relationship, h_birthdate, h_gender, h_phone,h_Addr, user_id);
+		Gson gson = new Gson();		
+		MediDTO[] list = gson.fromJson(json, MediDTO[].class);
 		
-		int cnt = new handiDAO().regiHandi(hdto);
+		int totalcnt = 0;
+		String msg = "";
+		
+		if(func.equals("regboxall")) {
+			totalcnt = new MediDAO().insertMedi(list);
+			
+			if(totalcnt == 8)
+				msg="2";
+			else if(totalcnt < 8 && totalcnt > 0)
+				msg = "1";
+			else
+				msg = "0";
+		}
+		else if(func.equals("delboxall")) {
+			int h_seq = Integer.parseInt(request.getParameter("h_seq"));
+			
+			totalcnt = new MediDAO().deleteMediAll(h_seq);
+			
+			if(totalcnt > 0)
+				msg = "1";
+			else
+				msg = "0";
+		}
+		else if(func.equals("regbox")) {
+			totalcnt = new MediDAO().updateMedi(list);
+			if(totalcnt > 0)
+				msg = "1";
+			else
+				msg = "0";
+		}
+		
+		else if(func.equals("delbox")) {
+			totalcnt = new MediDAO().deleteMedi(list);
+			if(totalcnt > 0)
+				msg = "1";
+			else
+				msg = "0";
+		}
 		
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
-		out.print("200");
+		out.print(msg);
 		
-		System.out.println(h_relationship);
-		System.out.println(h_name);
-		System.out.println(h_birthdate);
-		System.out.println(h_gender);
-		System.out.println(h_phone);
-		System.out.println(h_Addr);
-		System.out.println(user_id);
-		return "reg_handi.jsp";
+		return null;
 	}
 }

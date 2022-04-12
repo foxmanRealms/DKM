@@ -11,7 +11,7 @@ public class handiDTO {
 	 * VARCHAR2(30) NOT NULL, user_id VARCHAR2(30) NOT NULL, PRIMARY KEY (h_seq) );
 	 */
 
-	private double h_seq;
+	private int h_seq;
 	private String h_name;
 	private String h_relationship;
 	private String h_birthdate;
@@ -20,7 +20,7 @@ public class handiDTO {
 	private String h_phone;
 	private String user_id;
 
-	public handiDTO(double h_seq, String h_name, String h_relationship, String h_birthdate, String h_addr,
+	public handiDTO(int h_seq, String h_name, String h_relationship, String h_birthdate, String h_addr,
 			String h_gender, String h_phone, String user_id) {
 		this.h_seq = h_seq;
 		this.h_name = h_name;
@@ -43,11 +43,11 @@ public class handiDTO {
 		this.user_id = user_id;
 	}
 
-	public double getH_seq() {
+	public int getH_seq() {
 		return h_seq;
 	}
 
-	public void setH_seq(double h_seq) {
+	public void setH_seq(int h_seq) {
 		this.h_seq = h_seq;
 	}
 

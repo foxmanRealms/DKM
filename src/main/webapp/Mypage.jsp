@@ -1,3 +1,5 @@
+<%@page import="Model.QnaDAO"%>
+<%@page import="Model.QnaDTO"%>
 <%@page import="Model.StoryDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Model.StoryDAO"%>
@@ -12,110 +14,174 @@
 <meta name="viewport"
    content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="assets/css/style.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+tr, th, td {
+	text-align: center;
+}
+@font-face {
+    font-family: 'GangwonEdu_OTFBoldA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+</style>
+
 </head>
-<body class="is-preload">
+<body class="is-preload" style="font-family: 'GangwonEdu_OTFBoldA';">
+
+
+   <div id="page-wrapper">
+
+      <!-- Header -->
+		<%@ include file="./header.jsp" %>
 
    <%
    		// 회원
-      	UserDTO udto = (UserDTO)session.getAttribute("udto");
    		String user_id = udto.getUser_id();
    		
    		// 정보 공유
    		ArrayList<StoryDTO> mystories = new StoryDAO().myBoardAll(user_id);
    		
    		// 문의하기 
+   		QnaDTO qdto;
    		
    		// 문의하기 답변
    %>
 
-   <div id="page-wrapper">
-
-      <!-- Header -->
-      <header id="header">
-         <h1>
-            <a href="Index.jsp">복순이&nbsp;&nbsp;</a>by dr.boksun
-         </h1>
-         <nav id="nav">
-            <ul>
-               <li><a href="Index.jsp">홈</a></li>
-               <li><a href="select_handi.jsp">정보 등록 및 조회&nbsp;&nbsp;&nbsp;<i
-                     class='icon solid fa fa-angle-down'></i>
-               </a>
-                  <ul>
-                     <li><a href="reg_handi.jsp">회원 정보 등록</a></li>
-                     <li><a href="reg_box.jsp">보관함 등록 및 조회</a></li>
-                  </ul></li>
-               <li class='sub-menu'><a href="communityMain.jsp">커뮤니티&nbsp;&nbsp;&nbsp;<i
-                     class='fa fa-angle-down'></i></a>
-                  <ul>
-                     <li><a href="qnaMain.jsp">문의하기</a></li>
-                     <li><a href="storyMain.jsp">정보 공유</a></li>
-                  </ul></li>
-               <li class='sub-menu'><a href="Mypage.jsp">마이페이지&nbsp;&nbsp;&nbsp;<i
-                     class='fa fa-angle-down'></i></a>
-                  <ul>
-                     <li><a href="update_info.jsp">내 정보 수정</a></li>
-                     
-                     <% if(udto != null){ %>
-                        <li><a href="edit_pw_next.jsp?user_id=<%= udto.getUser_id()%>">비밀번호 재설정</a></li>
-                     <%} else{ %>
-                        <li><a href="edit_pw.jsp">비밀번호 변경</a></li>
-                     <%} %>
-                     <li><a href="select_user0.jsp">담당 복지사 조회</a></li>
-                     <li><a href="select_user1.jsp">보호자 조회</a></li>
-                  </ul></li>
-
-               <% if(udto != null){ %>
-                  <li><a href="LogoutServiceCon.do" class="button">로그아웃</a></li>
-               <%} else{%>
-                  <li><a href="Login.jsp" class="button">로그인</a></li>
-               <%} %>
-
-            </ul>
-         </nav>
-      </header>
-
-
-
       <!-- Main -->
       <section id="main" class="container" >
          <header>
-            <h2>마이 페이지</h2>
+            <h2>마이페이지</h2>
             <p>내 정보 관리</p>
          </header>
          <div class="box">
+        	<div class="row-6 row-12-mobilep">
             
+            <div class="mypage" style="text-align:center;">
+            <h3><span class="big-font"><%= udto.getUser_name() %></span>&nbsp;&nbsp;님의 페이지입니다.</h3>
             
-            <h4>내가 쓴 게시글</h4>
-            <% if(!mystories.isEmpty()){ %>
-            	<ul>
-            	<% for (StoryDTO st : mystories){ %>
-            		<li><a href="storySelect.jsp?story_seq=<%= st.getStory_seq() %>"><%= st.getStory_title() %></a></li>
-            	<%} %>
-            <%} else {%>
-            		<li>게시물이 없습니다.</li>
-            <%} %>
-            	</ul>
-            
-            
-            <!-- 답변 달렸을 경우, -->
-            <h4>문의글 답변 확인하기</h4>
-            	<ul>
-            		<li></li>
-            		<li></li>
-            		<li></li>
-            	</ul>
-
-			
 			<!-- 회원 정보 수정 : 페이지 이동-->
-            <h4><input type="button" class="button alt" value="내 정보 수정" onclick="updateInfo()"></h4>
-               
+            <h4><input type="button" style="width:fit-content; margin:5px 5px; border-radius:25px !important;" class="button" value="내 정보 수정" onclick="updateInfo()"></h4>
+            </div><br><br>
+            
+            <!-- 내가 쓴 게시글 보기 -->
+            <h4 style="text-align:center;">내가 쓴 게시글</h4><br>
+           	<table>
+           	<thead>
+           		<tr>
+           			<th style="text-align:center">번호</th>
+           			<th style="text-align:center">게시글 제목</th>
+           			<th style="text-align:center">작성일</th>
+           			<th style="text-align:center"><i class="fa-solid fa-eye"></i></th>
+           			<th style="text-align:center"><i class="fa-solid fa-heart"></i></th>
+           		</tr>
+           	</thead>
+           	
+           	<tbody>
+            <% if(!mystories.isEmpty()){  int num=1; %>
+            	<% for (StoryDTO st : mystories){ %>
+           		<tr>
+           			<td><%= num %></td>
+	           		<td>
+	           			<a href="storySelect.jsp?story_seq=<%= st.getStory_seq() %>"><%= st.getStory_title() %></a>
+	           		</td>
+	           		<td><%= st.getStory_joindate() %></td>
+	           		<td><%= st.getStory_cnt() %></td>
+	           		<td><%= st.getStory_like() %></td>
+           		</tr>
+            	<% num++; } %>
+            <!-- 게시글이 없을 경우 -->
+            <%} else {%>  
+        		<tr style="text-align:center">
+           			<td colspan="5">게시물이 없습니다.</td>
+           		</tr>
+            <%} %>
+            </tbody>
+           	</table>
+            <br><br>
+            
+            <!-- 답변 달렸을 경우, 업데이트 : ajax -->
+            <br>
+            <h4 style="text-align:center;">내 문의글 답변 확인하기</h4><br>
+            <table>
+            <thead>
+	            <tr>
+	            	<th style="text-align:center">번호</th>
+	            	<th style="text-align:center">문의글 제목</th>
+	            	<th style="text-align:center">작성일</th>
+	            	<th style="text-align:center">답변</th>
+	            </tr>
+            
+            <tbody id = "tbody">
+	           <!-- 문의글 답변 조회 리스트 -->
+            </tbody>
+            </table>
+            	
 
-
+		</div>	
    </div>
+ </section>
+ </div>
 
 
    <!-- Scripts -->
+   
+	<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		let user_id = "<%= user_id %>";
+		console.log(user_id);
+		
+		
+		// 내 문의글 전체 조회 + 답변 여부
+   		$.ajax({
+   			url : "SelectQnaReplyServiceCon.do",
+   			type : "post",
+   			data : {
+	        	user_id : user_id,
+	        },
+   			dataType : "json", 
+   			success : function(res){
+   				$('#tbody').html('');
+   				if(res.length == 0){
+	            	table = '<tr><td colspan="4" align="center">내가 작성한 문의글이 없습니다.</td></tr>'
+	            }
+	            else{  
+	            	let table ="";
+	            	for (let i = 0; i < res.length; i++) {
+	            		table = '<tr>';
+	            		table += '<td>'+ (i+1) +'</td>';
+	            		let qna_seq = res[i].qna_seq;
+	            		console.log(qna_seq);
+	            		table += '<td><a href=qnaSelect.jsp?qna_seq='+qna_seq+'>'+ res[i].qna_title +'</a></td>';
+						table += '<td>'+ res[i].qna_joindate +'</td>';
+						if(res[i].rep_seq != ""){
+							
+							if(res[i-1].qna_seq == res[i].qna_seq){
+								table += '<td><i class="fa-solid fa-envelope"></i>'
+											+'&nbsp;&nbsp;<i class="fa-solid fa-plus fa-1x"></i></td>';
+							} else{
+								table += '<td><i class="fa-solid fa-envelope"></i></td>';
+							}
+							
+						} else {
+							table += '<td></td>'
+						}
+						table += '</tr>';
+						$('#tbody').append(table);
+	            	}
+	            }
+	        },
+	        error : function() {
+	            alert('문의 답변 조회 실패!')
+	        }
+	    })
+	});
+	
+	</script>
+   
    
    <script type="text/javascript">
 
@@ -130,10 +196,14 @@
    			alert("회원 정보가 수정되었습니다.")
    		}
    	});
-
-   
    </script>
    
+   <!-- Footer -->
+   <%@ include file="./footer.jsp" %>
+   
+   
+   
+   <script src="https://kit.fontawesome.com/8b21a455c5.js" crossorigin="anonymous"></script>
    <script src="assets/js/jquery.min.js"></script>
    <script src="assets/js/jquery.dropotron.min.js"></script>
    <script src="assets/js/jquery.scrollex.min.js"></script>

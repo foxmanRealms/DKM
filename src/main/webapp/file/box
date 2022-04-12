@@ -1,0 +1,500 @@
+#include <NTPClient.h>
+#include <WiFi.h>
+#include <WiFiUdp.h>
+#include <ArduinoJson.h>
+
+#define MP3_FILENAME "/tts.mp3"
+#define BUFFER_SIZE 3000
+
+#include <HTTPClient.h>
+
+const char* ssid = "MIN";
+const char* password = "08210803";
+const char* host = "translate.kakao.com";
+
+#include "FS.h"
+#include "SPIFFS.h"
+
+#include "AudioFileSourceSPIFFS.h"
+#include "AudioFileSourceID3.h"
+#include "AudioGeneratorMP3.h"
+#include "AudioOutputI2SNoDAC.h"
+#include "AudioOutputI2S.h"
+
+AudioGeneratorMP3 *mp3;
+AudioFileSourceSPIFFS *file;
+AudioOutputI2S *out;
+AudioFileSourceID3 *id3;
+
+WiFiUDP udp;
+NTPClient timeClient(udp, "kr.pool.ntp.org", 32400, 3600000);
+
+int pushButton1 = 17;
+int pushButton2 = 16;
+int pushButton3 = 27;
+int pushButton4 = 14;
+int pushButton5 = 12;
+int pushButton6 = 13;
+int pushButton7 = 5;
+int pushButton8 = 23;
+
+String sound = "";
+String result = "";
+boolean check = false;
+
+
+String tim = "";
+int th, tm, ts;
+int tt;
+int tta = 21600; // 06:00:00
+int ttb = 32400; // 09:00:00
+int ttc = 39600; // 11:00:00
+int ttd = 50400; // 14:00:00
+int tte = 61200; // 17:00:00
+int ttf = 72000; // 20:00:00
+int ttg = 86399; // 23:59:59
+
+int cnt = 0;
+
+int trig = 19;
+int echo = 18;
+
+void setup() {
+  pinMode(trig, OUTPUT);
+  pinMode(echo, INPUT);
+
+  pinMode(pushButton1, INPUT_PULLUP);
+  pinMode(pushButton2, INPUT_PULLUP);
+  pinMode(pushButton3, INPUT_PULLUP);
+  pinMode(pushButton4, INPUT_PULLUP);
+  pinMode(pushButton5, INPUT_PULLUP);
+  pinMode(pushButton6, INPUT_PULLUP);
+  pinMode(pushButton7, INPUT_PULLUP);
+  pinMode(pushButton8, INPUT_PULLUP);
+
+  Serial.begin(115200);
+  if (!SPIFFS.begin())
+  {
+    Serial.println("SPIFFS Mount Failed");
+    return;
+  }
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.println("Connecting to WiFi..");
+  }
+  if (WiFi.status() == WL_CONNECTED) {
+    sound = "와이파이가, 연결되었습니다. 건강한 하루 되세요오옹";
+    HttpConPlayVoice(sound);
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected.");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  delay(1000);
+
+  timeClient.begin();
+
+  timeClient.update();
+
+
+}
+
+void loop() {
+  // 버튼신호
+  int btn1 = digitalRead(pushButton1);
+  int btn2 = digitalRead(pushButton2);
+  int btn3 = digitalRead(pushButton3);
+  int btn4 = digitalRead(pushButton4);
+  int btn5 = digitalRead(pushButton5);
+  int btn6 = digitalRead(pushButton6);
+  int btn7 = digitalRead(pushButton7);
+  int btn8 = digitalRead(pushButton8);
+
+
+
+  timeClient.update(); // 시간업뎃
+  tim = timeClient.getFormattedTime(); // 현재 시간
+
+  th = tim.substring(0, 2).toInt(); // 시 단위 형변환
+  tm = tim.substring(3, 5).toInt(); // 분 단위 형변환
+  ts = tim.substring(6, 8).toInt(); // 초 단위 형변환
+
+  tt = (long)th * 3600 + tm * 60 + ts; // 시간을 초로 계산
+
+
+
+  // 알람
+  if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
+
+    HTTPClient http;
+    http.begin("http://121.147.0.169:8090/Project_bok/SendToBoxService?data=1234&seq=97");
+    delay(2000);
+    int httpCode = http.GET();//Make the request
+    if (httpCode > 0) { //Check for the returning code
+      Serial.println(httpCode);
+      result = http.getString();
+      Serial.println(result);
+      if (result != "") {
+        sound = result;
+        HttpConPlayVoice(sound);
+        check = true;
+      }
+      if (((tt >= tta && tt <= ttb) || (tt >= ttc && tt <= ttd) || (tt >= tte && tt <= ttf)) && check == true) {
+        if (btn1 == 1 || btn2 == 1 || btn3 == 1 || btn4 == 1 || btn5 == 1 || btn6 == 1 || btn7 == 1 || btn8 == 1) {
+          check = false;
+          return;
+        }
+      } else if (tt > ttb && tt < ttc && check == true) {
+        if (btn1 == 1 || btn2 == 1 || btn3 == 1 || btn4 == 1 || btn5 == 1 || btn6 == 1 || btn7 == 1 || btn8 == 1) {
+          sound = "아침약을, 복용하거나, 사용하시지, 않았습니다, 보관함 확인 후, 약을 복용하거나, 사용해주세요오옹";
+          HttpConPlayVoice(sound);
+          check = false;
+          return;
+        }
+      } else if (tt > ttd && tt < tte && check == true) {
+        if (btn1 == 1 || btn2 == 1 || btn3 == 1 || btn4 == 1 || btn5 == 1 || btn6 == 1 || btn7 == 1 || btn8 == 1) {
+          sound = "점심약을, 복용하거나, 사용하시지, 않았습니다, 보관함 확인 후, 약을 복용하거나, 사용해주세요오옹";
+          HttpConPlayVoice(sound);
+          check == false;
+          return;
+        }
+      } else if (tt > ttf && tt <= ttg && check == true) {
+        if (btn1 == 1 || btn2 == 1 || btn3 == 1 || btn4 == 1 || btn5 == 1 || btn6 == 1 || btn7 == 1 || btn8 == 1) {
+          sound = "저녁약을, 복용하거나, 사용하시지, 않았습니다, 보관함 확인 후, 약을 복용하거나, 사용해주세요오옹";
+          HttpConPlayVoice(sound);
+          check = false;
+          return;
+        }
+      }
+    } else {
+      Serial.println("Error on HTTP request");
+    }
+    http.end();
+  }
+  delay(500);
+
+
+  // 초음파센서
+  if ((tt >= tta && tt <= ttb) || (tt >= ttc && tt <= ttd) || (tt >= tte && tt <= ttf)) {
+    digitalWrite(trig, HIGH);
+    delay(10);
+    digitalWrite(trig, LOW);
+    int duration = pulseIn(echo, HIGH);
+
+    duration = duration / 2;
+
+    int distance = duration / 29.1;
+    while (distance > 30) {
+      break;
+    }
+
+    if (cnt == 0 && distance <= 30) {
+      sound = "안녕하세요, 당신의 건강을 챙겨주는, 닥터, 복순이 입니다, 버튼을, 눌러주세요오옹";
+      HttpConPlayVoice(sound);
+      cnt = 1;
+    }
+    if (distance > 30) {
+      cnt = 0;
+    }
+  }
+
+  // 보관함
+  if (check == false) {
+    if (btn1 == 1) {
+      if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
+
+        HTTPClient http;
+
+        http.begin("http://121.147.0.169:8090/Project_bok/SendToBoxService?data=0&seq=97"); //Specify the URL
+        int httpCode = http.GET();                                        //Make the request
+
+        if (httpCode > 0) { //Check for the returning code
+
+          Serial.println(httpCode);
+          result = http.getString();
+          Serial.println(result);
+          sound = result;
+          HttpConPlayVoice(sound);
+        } else {
+          Serial.println("Error on HTTP request");
+        }
+        http.end(); //Free the resources
+      }
+      delay(500);
+    } else if (btn2 == 1) {
+      if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
+
+        HTTPClient http;
+
+        http.begin("http://121.147.0.169:8090/Project_bok/SendToBoxService?data=1&seq=97"); //Specify the URL
+        int httpCode = http.GET();                                        //Make the request
+
+        if (httpCode > 0) { //Check for the returning code
+          Serial.println(httpCode);
+          result = http.getString();
+          Serial.println(result);
+          sound = result;
+          HttpConPlayVoice(sound);
+        } else {
+          Serial.println("Error on HTTP request");
+        }
+        http.end(); //Free the resources
+      }
+      delay(500);
+    } else if (btn3 == 1) {
+      if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
+
+        HTTPClient http;
+
+        http.begin("http://121.147.0.169:8090/Project_bok/SendToBoxService?data=2&seq=97"); //Specify the URL
+        int httpCode = http.GET();                                        //Make the request
+
+        if (httpCode > 0) { //Check for the returning code
+          Serial.println(httpCode);
+          result = http.getString();
+          Serial.println(result);
+          sound = result;
+          HttpConPlayVoice(sound);
+        } else {
+          Serial.println("Error on HTTP request");
+        }
+        http.end(); //Free the resources
+      }
+      delay(500);
+    } else if (btn4 == 1) {
+      if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
+
+        HTTPClient http;
+
+        http.begin("http://121.147.0.169:8090/Project_bok/SendToBoxService?data=3&seq=97"); //Specify the URL
+        int httpCode = http.GET();                                        //Make the request
+
+        if (httpCode > 0) { //Check for the returning code
+          Serial.println(httpCode);
+          result = http.getString();
+          Serial.println(result);
+          sound = result;
+          HttpConPlayVoice(sound);
+        } else {
+          Serial.println("Error on HTTP request");
+        }
+        http.end(); //Free the resources
+      }
+      delay(500);
+    } else if (btn5 == 1) {
+      if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
+
+        HTTPClient http;
+
+        http.begin("http://121.147.0.169:8090/Project_bok/SendToBoxService?data=4&seq=97"); //Specify the URL
+        int httpCode = http.GET();                                        //Make the request
+
+        if (httpCode > 0) { //Check for the returning code
+          Serial.println(httpCode);
+          result = http.getString();
+          Serial.println(result);
+          sound = result;
+          HttpConPlayVoice(sound);
+        } else {
+          Serial.println("Error on HTTP request");
+        }
+        http.end(); //Free the resources
+      }
+      delay(500);
+    } else if (btn6 == 1) {
+      if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
+
+        HTTPClient http;
+
+        http.begin("http://121.147.0.169:8090/Project_bok/SendToBoxService?data=5&seq=97"); //Specify the URL
+        int httpCode = http.GET();                                        //Make the request
+
+        if (httpCode > 0) { //Check for the returning code
+          Serial.println(httpCode);
+          result = http.getString();
+          Serial.println(result);
+          sound = result;
+          HttpConPlayVoice(sound);
+        } else {
+          Serial.println("Error on HTTP request");
+        }
+        http.end(); //Free the resources
+      }
+      delay(500);
+    } else if (btn7 == 1) {
+      if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
+
+        HTTPClient http;
+
+        http.begin("http://121.147.0.169:8090/Project_bok/SendToBoxService?data=6&seq=97"); //Specify the URL
+        int httpCode = http.GET();                                        //Make the request
+
+        if (httpCode > 0) { //Check for the returning code
+          Serial.println(httpCode);
+          result = http.getString();
+          Serial.println(result);
+          sound = result;
+          HttpConPlayVoice(sound);
+        } else {
+          Serial.println("Error on HTTP request");
+        }
+        http.end(); //Free the resources
+      }
+      delay(500);
+    } else if (btn8 == 1) {
+      if ((WiFi.status() == WL_CONNECTED)) { //Check the current connection status
+
+        HTTPClient http;
+
+        http.begin("http://121.147.0.169:8090/Project_bok/SendToBoxService?data=7&seq=97"); //Specify the URL
+        int httpCode = http.GET();                                        //Make the request
+
+        if (httpCode > 0) { //Check for the returning code
+          Serial.println(httpCode);
+          result = http.getString();
+          Serial.println(result);
+          sound = result;
+          HttpConPlayVoice(sound);
+        } else {
+          Serial.println("Error on HTTP request");
+        }
+        http.end(); //Free the resources
+      }
+      delay(500);
+    }
+  }
+}
+
+
+
+// TTS
+void HttpConPlayVoice(String sound) {
+  sound = urlencode(sound);
+  sound = "https://tts-translate.kakao.com/newtone?message=" + sound + "%20";
+
+  Serial.println(sound);
+
+  HTTPClient http;
+  http.begin(sound);
+
+  int httpCode = http.GET();
+
+  if (httpCode > 0)
+  {
+    Serial.printf("[HTTP] GET... Kakao i code: %d\n", httpCode);
+    if (httpCode == HTTP_CODE_OK)
+    {
+      int32_t len = http.getSize();
+      Serial.println(len);
+      uint8_t buff[BUFFER_SIZE] = { 0 };
+      WiFiClient * stream = http.getStreamPtr();
+
+      Serial.printf("Writing file: %s\r\n", MP3_FILENAME);
+
+      File file2 = SPIFFS.open(MP3_FILENAME, FILE_WRITE);
+      if (!file2)
+      {
+        Serial.println("- failed to open file for writing");
+        return;
+      }
+
+      while (http.connected() && (len > 0 || len == -1))
+      {
+        // get available data size
+        size_t size = stream->available();
+
+        if (size)
+        {
+          int read_size = BUFFER_SIZE;
+          if ( read_size > size ) read_size = size;
+          int c = stream->readBytes(buff, read_size);
+          file2.write(buff, c);
+          if (len > 0)
+          {
+            len -= c;
+          }
+        }
+        delay(1);
+      }
+      file2.flush();
+      file2.close();
+    }
+    else
+    {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    }
+    http.end();
+  }
+
+  audioLogger = &Serial;
+  file = new AudioFileSourceSPIFFS(MP3_FILENAME);
+  id3 = new AudioFileSourceID3(file);
+  out = new AudioOutputI2S(0, AudioOutputI2S::INTERNAL_DAC);
+  mp3 = new AudioGeneratorMP3();
+  mp3->begin(id3, out);
+
+  while (mp3->isRunning())
+  {
+    if (!mp3->loop())
+    {
+      //delay(1000); 주석해줘야 지지직안거림
+      mp3->stop();
+    }
+  }
+
+  {
+    Serial.printf("MP3 done\n");
+    delay(1000);
+  }
+
+  // 강제 멈추기
+  mp3->stop();
+
+}
+
+// 번역
+String urlencode(String str) {
+  String encodedString = "";
+  char c;
+  char code0;
+  char code1;
+  char code2;
+  for (int i = 0; i < str.length(); i++)
+  {
+    c = str.charAt(i);
+    if (c == ' ')
+    {
+      encodedString += '+';
+    }
+    else if (isalnum(c))
+    {
+      encodedString += c;
+    }
+    else
+    {
+      code1 = (c & 0xf) + '0';
+      if ((c & 0xf) > 9)
+      {
+        code1 = (c & 0xf) - 10 + 'A';
+      }
+      c = (c >> 4) & 0xf;
+      code0 = c + '0';
+      if (c > 9)
+      {
+        code0 = c - 10 + 'A';
+      }
+      code2 = '\0';
+      encodedString += '%';
+      encodedString += code0;
+      encodedString += code1;
+      //encodedString+=code2;
+    }
+    yield();
+  }
+  return encodedString;
+
+}

@@ -23,7 +23,11 @@ public class StoryLikeService implements Command {
 		int story_seq = Integer.parseInt(request.getParameter("story_seq"));
 		int story_like = Integer.parseInt(request.getParameter("story_like"));
 		
-		StoryDTO stdto = new StoryDTO(story_seq, "", "", "", "", "", 0, story_like);
+		if(story_like < 0) {
+			story_like = 0;
+		}
+		
+		//StoryDTO stdto = new StoryDTO(story_seq, "", "", "", "", "", 0, story_like);
 		int cnt = new StoryDAO().updateLike(story_seq, story_like);
 		
 		if(cnt > 0) {
